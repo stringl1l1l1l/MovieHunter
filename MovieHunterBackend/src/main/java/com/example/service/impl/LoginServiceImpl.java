@@ -61,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
 //            return new ResponseResult(400,"您已在登录状态，无需重复登录");
 //        }
         //认证通过，使用userid生成一个jwt jwt存入ResponseResult返回
-        String userid = loginUser.getUser().getUserId().toString();
+        String userid = loginUser.getUser().getUserId();
         String jwt = JwtUtil.createJWT(userid);
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
@@ -78,7 +78,7 @@ public class LoginServiceImpl implements LoginService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userMapper.insert(user);
 
-            String userId = user.getUserId().toString();
+            String userId = user.getUserId();
             String jwt = JwtUtil.createJWT(userId);
             Map<String, String> map = new HashMap<>();
             map.put("token", jwt);
@@ -105,7 +105,7 @@ public class LoginServiceImpl implements LoginService {
         UsernamePasswordAuthenticationToken authenticationToken
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
-        Long userId = loginUser.getUser().getUserId();
+        String userId = loginUser.getUser().getUserId();
         //删除redis中的值
         redisCache.deleteObject("login:" + userId);
         return new ResponseResult<>(200, "注销成功");

@@ -12,7 +12,7 @@ import java.util.Map;
 public interface MenuMapper extends BaseMapper<Menu> {
 
     @Select("SELECT DISTINCT permission FROM view_user_perm WHERE user_id = #{userId}")
-    List<String> selectPermByUserId(Long userId);
+    List<String> selectPermByUserId(String userId);
 
     @Select("SELECT * FROM view_role_perm")
     List<Map<String,Object>> showAllRolePermission();

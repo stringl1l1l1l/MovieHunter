@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -33,4 +35,9 @@ public class Favorite implements Serializable {
     @ApiModelProperty(value = "最近更新时间",position = 3)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "逻辑删除状态",hidden = true)
+    @Max(value = 1, message = "格式错误")
+    @Min(value = 0, message = "格式错误")
+    private Integer delFlag;
 }

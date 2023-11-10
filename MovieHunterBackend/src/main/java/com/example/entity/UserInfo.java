@@ -14,7 +14,7 @@ public class UserInfo {
 
     private Long userInfoId;
 
-    private Long userId;
+    private String userId;
 
     private String introduction;
 
@@ -25,7 +25,7 @@ public class UserInfo {
 
     private List<String> roles;
 
-    public UserInfo(Long userInfoId, Long userId, String introduction, String avatar, String name) {
+    public UserInfo(Long userInfoId, String userId, String introduction, String avatar, String name) {
         this.userInfoId = userInfoId;
         this.userId = userId;
         this.introduction = introduction;

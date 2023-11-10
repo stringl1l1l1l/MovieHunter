@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -28,15 +30,20 @@ public class Comment implements Serializable {
     private Long movieId;
 
     @ApiModelProperty(value = "用户ID",position = 2)
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "评论打分",position = 3)
-    private Float score;
+    private Integer rating;
 
     @ApiModelProperty(value = "评论内容",position = 4)
     private String content;
 
     @ApiModelProperty(value = "评论发表时间",position = 5)
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime releaseTime;
+    private LocalDateTime commentTime;
+
+    @ApiModelProperty(value = "逻辑删除状态",hidden = true)
+    @Max(value = 1, message = "格式错误")
+    @Min(value = 0, message = "格式错误")
+    private Integer delFlag;
 }

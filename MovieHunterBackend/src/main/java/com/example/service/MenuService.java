@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MenuService {
-    List<String> selectPermByUserId(Long userId);
+    List<String> selectPermByUserId(String userId);
 
     List<Map<String,Object>> showAllRolePermission();
 
