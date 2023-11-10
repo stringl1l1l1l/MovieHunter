@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+
+spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不加载缓存，修改即时生效
+  datasource: # 数据库配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/parkTest?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    username: root
+    password: 1234
+    hikari:
+      maximum-pool-size: 10 # 最大连接池数
+      max-lifetime: 1770000
+  redis:
+#    password: 123456
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰命名规范
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: # mapper映射文件位置
+    - classpath:mapper/*.xml
+  type-aliases-package: com.example.entity
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+#分页pageHelper
