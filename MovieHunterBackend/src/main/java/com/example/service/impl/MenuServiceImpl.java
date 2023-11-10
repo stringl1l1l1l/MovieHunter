@@ -24,7 +24,7 @@ public class MenuServiceImpl implements MenuService {
     private RoleMenuMapper roleMenuMapper;
 
     @Override
-    public List<String> selectPermByUserId(Long userId) {
+    public List<String> selectPermByUserId(String userId) {
        return menuMapper.selectPermByUserId(userId);
     }
 

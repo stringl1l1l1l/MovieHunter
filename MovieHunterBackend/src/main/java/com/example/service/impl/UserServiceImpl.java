@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByPhoneNum(String phoneNum) {
+    public User findUserByPhoneNum(String phone) {
         return userMapper.selectOne(
-                new LambdaQueryWrapper<User>().eq(User::getPhoneNum, phoneNum)
+                new LambdaQueryWrapper<User>().eq(User::getPhone, phone)
         );
     }
 
@@ -101,10 +101,8 @@ public class UserServiceImpl implements UserService {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getUserId, user.getUserId())
                 .set(User::getUsername, user.getUsername())
-                .set(User::getPhoneNum, user.getPhoneNum())
+                .set(User::getPhone, user.getPhone())
                 .set(User::getPassword, user.getPassword())
-                .set(User::getCarNum, user.getCarNum())
-                .set(User::getRegisterTime, user.getRegisterTime())
                 .set(User::getDelFlag, user.getDelFlag());
 
         return userMapper.update(user, wrapper);

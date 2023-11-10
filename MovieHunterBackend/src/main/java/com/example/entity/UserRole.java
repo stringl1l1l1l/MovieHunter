@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UserRole {
 
     @TableId(type = IdType.NONE)
-    private Long userId;
+    private String userId;
 
     private Integer roleId;
 }

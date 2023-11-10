@@ -30,8 +30,4 @@ public class Menu implements Serializable {
 
     @ApiModelProperty(value = "逻辑删除标识",hidden = true)
     private Integer delFlag;
-
-    @Version
-    @ApiModelProperty(value = "乐观锁版本",hidden = true)
-    private Integer version;
 }
