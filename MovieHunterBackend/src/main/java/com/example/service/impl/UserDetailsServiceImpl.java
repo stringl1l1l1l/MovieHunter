@@ -1,8 +1,7 @@
 package com.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.entity.LoginUserWithCode;
-import com.example.entity.LoginUserWithPassword;
+import com.example.entity.LoginUser;
 import com.example.entity.User;
 import com.example.mapper.MenuMapper;
 import com.example.mapper.UserMapper;
@@ -34,6 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //设置权限信息
         List<String> list = menuMapper.selectPermByUserId(user.getUserId());
-        return new LoginUserWithCode(user, list);
+        return new LoginUser(user, list);
     }
 }

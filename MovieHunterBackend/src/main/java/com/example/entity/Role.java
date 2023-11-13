@@ -23,7 +23,4 @@ public class Role {
 
     @ApiModelProperty(value = "逻辑删除标识")
     private Integer delFlag;
-
-    @Version
-    private Integer version;
 }

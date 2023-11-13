@@ -9,7 +9,7 @@ public class SendEmailUtils {
 
     private static final String HOST_NAME = "smtp.qq.com";
     private static final String SMTP_EMAIL = "2682855462@qq.com";
-    private static final String SMTP_PASSWORD_APP = "kundyovyhazkdjbi";
+    private static final String SMTP_PASSWORD_APP = "xznccvmnzunhecac";
     private static final String SENDER_NAME = "MovieHunter";
     /**
      * 发送验证码

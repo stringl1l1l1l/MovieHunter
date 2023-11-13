@@ -1,21 +1,23 @@
 package com.example.entity;
 
+import com.example.jsr303.LoginOperation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("验证码登录用户类")
-public class LoginUserWithCode implements Serializable{
+@ApiModel("密码登录用户类")
+public class LoginUserWithPwd implements Serializable {
 
-    private static final long serialVersionUID = -5100464565667956619L;
+    private static final long serialVersionUID = 633328115305436341L;
 
     @ApiModelProperty(value = "用户id",hidden = true)
     private String userId;
@@ -26,6 +28,7 @@ public class LoginUserWithCode implements Serializable{
     @ApiModelProperty(value = "用户邮箱",position = 1)
     private String email;
 
-    @ApiModelProperty(value = "验证码",position = 2)
-    private String code;
+    @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
+    @ApiModelProperty(value = "用户密码",position = 2)
+    private String password;
 }

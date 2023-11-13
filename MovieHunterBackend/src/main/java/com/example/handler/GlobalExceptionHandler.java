@@ -35,7 +35,8 @@ public class GlobalExceptionHandler {
             });
             return new ResponseResult(400, "数据格式错误", map);
         }
-        logger.error("{}",ex.getMessage());
+        logger.error("",ex);
+        ex.printStackTrace();
         return new ResponseResult(500, ex.getMessage());
     }
 }

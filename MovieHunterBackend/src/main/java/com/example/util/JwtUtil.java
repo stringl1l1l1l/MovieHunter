@@ -102,4 +102,9 @@ public class JwtUtil {
                 .parseClaimsJws(jwt)
                 .getBody();
     }
+
+    public static void main(String[] args) {
+        String jwt = createJWT("0");
+        System.out.println(jwt);
+    }
 }

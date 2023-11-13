@@ -1,7 +1,7 @@
 package com.example.filter;
 
 
-import com.example.entity.LoginUserWithPassword;
+import com.example.entity.LoginUser;
 import com.example.util.JwtUtil;
 import com.example.util.RedisCache;
 import io.jsonwebtoken.Claims;
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         //从redis中获取对象
         String key = "login:" + userId;
-        LoginUserWithPassword loginUser = redisCache.getCacheObject(key);
+        LoginUser loginUser = redisCache.getCacheObject(key);
         if(Objects.isNull(loginUser)) {
             throw new RuntimeException("用户未登录");
         }
