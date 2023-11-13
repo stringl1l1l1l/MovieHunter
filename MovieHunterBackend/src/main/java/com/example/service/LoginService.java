@@ -9,4 +9,10 @@ public interface LoginService {
     ResponseResult register(User user);
 
     ResponseResult logout();
+
+    ResponseResult sendMsg(User user);
+
+    ResponseResult loginWithCode(User user);
+
+    ResponseResult registerWithCode(User user);
 }

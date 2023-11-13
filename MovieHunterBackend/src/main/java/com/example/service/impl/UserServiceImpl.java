@@ -69,6 +69,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) {
+        return userMapper.selectOne(
+                new LambdaQueryWrapper<User>().eq(User::getEmail, email)
+        );
+    }
+
+    @Override
     public List<User> findUsersByMap(Map<String, Object> map) {
         return userMapper.selectByMap(map);
     }

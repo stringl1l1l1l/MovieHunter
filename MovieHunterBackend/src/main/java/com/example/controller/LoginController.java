@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,5 +50,20 @@ public class LoginController {
         if(result.getCode() == 200)
             logger.info("注销成功");
         return result;
+    }
+
+    @ApiOperation("发送验证码")
+    @PostMapping("/sendMsg")
+    public ResponseResult sendMsg(@RequestBody User user) {
+        ResponseResult result = loginService.sendMsg(user);
+        if(result.getCode() == 200)
+            logger.info("用户 { 用户名: " + user.getUsername() + "} 验证码发送成功");
+        return result;
+    }
+
+    @ApiOperation("验证码登录")
+    @PostMapping("/loginWithCode")
+    public ResponseResult loginWithCode(@RequestBody User user) {
+        return null;
     }
 }

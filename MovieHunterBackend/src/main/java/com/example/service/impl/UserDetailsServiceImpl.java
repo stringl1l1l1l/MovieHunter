@@ -1,7 +1,8 @@
 package com.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.entity.LoginUser;
+import com.example.entity.LoginUserWithCode;
+import com.example.entity.LoginUserWithPassword;
 import com.example.entity.User;
 import com.example.mapper.MenuMapper;
 import com.example.mapper.UserMapper;
@@ -26,13 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private MenuMapper menuMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, email));
         if(Objects.isNull(user)){
             throw new UsernameNotFoundException("用户不存在");
         }
         //设置权限信息
         List<String> list = menuMapper.selectPermByUserId(user.getUserId());
-        return new LoginUser(user,list);
+        return new LoginUserWithCode(user, list);
     }
 }

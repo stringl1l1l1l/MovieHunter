@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class LoginUser implements UserDetails {
+public class LoginUserWithPassword implements UserDetails {
     private User user;
 
     private List<String> permissions;
@@ -21,7 +21,7 @@ public class LoginUser implements UserDetails {
     @JSONField(serialize = false)
     private List<SimpleGrantedAuthority> authorities;
 
-    public LoginUser(User user, List<String> permissions) {
+    public LoginUserWithPassword(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
     }
