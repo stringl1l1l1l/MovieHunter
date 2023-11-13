@@ -57,12 +57,4 @@ public class SMTPAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
        return (SMTPAuthenticationToken.class.isAssignableFrom(authentication));
     }
-
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    public void setRedisCache(RedisCache redisCache) {
-        this.redisCache = redisCache;
-    }
 }
