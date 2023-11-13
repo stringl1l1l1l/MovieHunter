@@ -1,16 +1,14 @@
 package com.example.controller;
 
 import com.example.entity.LoginUserWithCode;
-import com.example.entity.LoginUserWithPwd;
+import com.example.entity.LoginUserWithCodePwd;
 import com.example.entity.ResponseResult;
-import com.example.entity.User;
 import com.example.jsr303.LoginOperation;
 import com.example.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +27,17 @@ public class LoginController {
 
     @ApiOperation("登录，并返回token")
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithPwd user){
+    public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCodePwd user){
         ResponseResult result = loginService.login(user);
         if(result.getCode() == 200)
             logger.info("用户 { " + user.getUserId() + "} 登录成功");
         return result;
     }
 
-    @ApiOperation("使用邮箱验证码注册，并返回token")
-    @PostMapping("/registerWithCode")
-    public ResponseResult registerWithCode(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCode user){
-        ResponseResult result = loginService.registerWithCode(user);
+    @ApiOperation("使用邮箱密码注册，通过验证码验证邮箱后返回token")
+    @PostMapping("/register")
+    public ResponseResult register(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCodePwd user){
+        ResponseResult result = loginService.register(user);
         if(result.getCode() == 200)
             logger.info("用户 { " + user.getUserId() + "} 注册成功");
         return result;

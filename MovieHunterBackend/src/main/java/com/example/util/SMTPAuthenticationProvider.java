@@ -31,7 +31,7 @@ public class SMTPAuthenticationProvider implements AuthenticationProvider {
         LoginUser loginUser = (LoginUser) userDetailsService.loadUserByUsername(email);
         if(loginUser == null) {
             // todo:数据库中不存在该邮箱对应用户
-            System.out.println("数据库中不存在该邮箱对应用户");
+            throw new BadCredentialsException("数据库中不存在该邮箱对应用户");
         }
         else {
             // todo:查询缓存中验证码是否和credential一致
@@ -39,15 +39,15 @@ public class SMTPAuthenticationProvider implements AuthenticationProvider {
             String codeInCache = redisCache.getCacheObject("code:" + loginUser.getUser().getEmail());
             if(credentials == null) {
                 // todo:未输入验证码
-                System.out.println("未输入验证码");
+                throw new BadCredentialsException("未输入验证码");
             }
             else if (codeInCache.isEmpty()) {
                 // todo:redis中验证码为空或失效
-                System.out.println("redis中验证码为空或失效");
+                throw new BadCredentialsException("需要发送验证码");
             }
             else if(!credentials.equals(codeInCache)){
                 // todo:验证码不匹配
-                System.out.println("验证码不匹配");
+                throw new BadCredentialsException("验证码不匹配");
             }
         }
         return new SMTPAuthenticationToken(loginUser, loginUser.getAuthorities());

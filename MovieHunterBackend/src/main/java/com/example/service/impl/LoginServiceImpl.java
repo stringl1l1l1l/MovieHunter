@@ -46,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public ResponseResult login(LoginUserWithPwd user) {
+    public ResponseResult login(LoginUserWithCodePwd user) {
         //数据库中查询用户是否存在
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
@@ -71,33 +71,6 @@ public class LoginServiceImpl implements LoginService {
         return new ResponseResult<Map>(200, "登录成功", map);
     }
 
-    public ResponseResult register(LoginUserWithPwd user) {
-        User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
-        if (Objects.isNull(u)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            User insertUser= new User(user);
-            userMapper.insert(insertUser);
-
-            String userId = insertUser.getUserId();
-            String jwt = JwtUtil.createJWT(userId);
-            Map<String, String> map = new HashMap<>();
-            map.put("token", jwt);
-            //授予该用户权限
-            List<String> list = roleMapper.selectPermByRoleName("用户");
-            redisCache.setCacheObject("login:" + userId, new LoginUser(new User(user), list));
-            //在user_role表中添加用户与角色的关联
-            userRoleMapper.insert(new UserRole(insertUser.getUserId(),
-                    roleMapper.selectOne(
-                                    new LambdaQueryWrapper<Role>()
-                                            .eq(Role::getRoleName, "用户"))
-                            .getRoleId())
-            );
-            // 在user_info表中添加用户个人信息
-//            userInfoMapper.insert(new UserInfo(null, user.getUserId(), null, "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getUsername()));
-            return new ResponseResult<Map>(200, "注册成功", map);
-        }
-        return new ResponseResult<>(500, "用户已存在,请登录");
-    }
 
     @Override
     public ResponseResult logout() {
@@ -132,9 +105,6 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult loginWithCode(LoginUserWithCode user) {
         SMTPAuthenticationToken authenticationToken = new SMTPAuthenticationToken(user.getEmail(), user.getCode());
         Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
-        if (Objects.isNull(authentication)) {
-            throw new RuntimeException("登录失败");
-        }
 
         String userid = user.getUserId();
         String jwt = JwtUtil.createJWT(userid);
@@ -146,7 +116,39 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseResult registerWithCode(LoginUserWithCode user) {
-        return null;
+    public ResponseResult register(LoginUserWithCodePwd user) {
+        User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
+        if (Objects.isNull(u)) {
+            // 验证邮箱有效性
+            SMTPAuthenticationToken authenticationToken = new SMTPAuthenticationToken(user.getEmail(), user.getCode());
+            Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
+
+            // 用户数据插入数据库
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User insertUser = new User(user);
+            userMapper.insert(insertUser);
+
+            // 生成JWT
+            String userId = insertUser.getUserId();
+            String jwt = JwtUtil.createJWT(userId);
+            Map<String, String> map = new HashMap<>();
+            map.put("token", jwt);
+
+            //授予该用户权限
+            List<String> list = roleMapper.selectPermByRoleName("用户");
+            redisCache.setCacheObject("login:" + userId, new LoginUser(new User(user), list));
+            //在user_role表中添加用户与角色的关联
+            userRoleMapper.insert(new UserRole(insertUser.getUserId(),
+                    roleMapper.selectOne(
+                                    new LambdaQueryWrapper<Role>()
+                                            .eq(Role::getRoleName, "用户"))
+                            .getRoleId())
+            );
+
+            // 在user_info表中添加用户个人信息
+//            userInfoMapper.insert(new UserInfo(null, user.getUserId(), null, "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getUsername()));
+            return new ResponseResult<Map>(200, "注册成功", map);
+        }
+        return new ResponseResult<>(500, "用户已存在,请登录");
     }
 }

@@ -50,7 +50,7 @@ public class User implements Serializable {
     @Min(value = 0, message = "格式错误")
     private Integer delFlag;
 
-    public User(LoginUserWithPwd user) {
+    public User(LoginUserWithCodePwd user) {
         this.setPassword(user.getPassword());
         this.setEmail(user.getEmail());
     }
