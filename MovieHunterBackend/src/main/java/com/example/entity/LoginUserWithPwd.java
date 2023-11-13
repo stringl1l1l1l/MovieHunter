@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("验证码密码登录用户类")
-public class LoginUserWithCodePwd implements Serializable {
+@ApiModel("密码登录用户类")
+public class LoginUserWithPwd implements Serializable {
 
     private static final long serialVersionUID = 633328115305436341L;
 
@@ -31,8 +31,4 @@ public class LoginUserWithCodePwd implements Serializable {
     @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
     @ApiModelProperty(value = "用户密码",position = 2)
     private String password;
-
-
-    @ApiModelProperty(value = "验证码",position = 3)
-    private String code;
 }

@@ -46,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public ResponseResult login(LoginUserWithCodePwd user) {
+    public ResponseResult loginWithPwd(LoginUserWithPwd user) {
         //数据库中查询用户是否存在
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
@@ -97,7 +97,7 @@ public class LoginServiceImpl implements LoginService {
         }
 
         // 将验证码缓存到redis，过期时间1小时
-        redisCache.setCacheObject("code:" + email, code, 1, TimeUnit.HOURS);
+        redisCache.setCacheObject("code:" + email, code, 1, TimeUnit.MINUTES);
         return new ResponseResult<>(200, "验证码发送成功，请注意查收");
     }
 
