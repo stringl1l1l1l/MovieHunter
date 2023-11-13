@@ -23,7 +23,7 @@ public class Movie implements Serializable {
 
     @ApiModelProperty(value = "电影ID")
     @TableId(type = IdType.AUTO)
-    private Long moveId;
+    private Long movieId;
 
     @ApiModelProperty(value = "电影名称",position = 1)
     private String name;
@@ -44,7 +44,7 @@ public class Movie implements Serializable {
     private Float score;
 
     @ApiModelProperty(value = "电影分类",position = 7)
-    private Movie genres;
+    private String genres;
 
     @ApiModelProperty(value = "电影分类掩码",position = 8)
     private Integer genresMask;

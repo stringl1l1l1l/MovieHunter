@@ -44,4 +44,9 @@ public class MovieServiceImpl implements MovieService {
     public IPage<Movie> findMoviesByPages(int pageNum, int pageSize) {
         return movieMapper.selectPage(new Page<>(pageNum, pageSize), null);
     }
+
+    @Override
+    public List<Movie> findMoviesByRegionsMask(int mask) {
+        return movieMapper.findMoviesByRegionsMask(mask);
+    }
 }

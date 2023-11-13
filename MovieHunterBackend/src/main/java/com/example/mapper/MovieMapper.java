@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface MovieMapper extends BaseMapper<Movie> {
 
-    @Select("SELECT * FROM movie WHERE del_flag = 0 AND (genres_mask & #{mask} > 0)")
+    @Select("SELECT * FROM movie WHERE (genres_mask & #{mask}) > 0 AND del_flag = 0")
     List<Movie> findMoviesByGenresMask(int mask);
+
+    @Select("SELECT * FROM movie WHERE (regions_mask & #{mask}) > 0 AND del_flag = 0")
+    List<Movie> findMoviesByRegionsMask(int mask);
 }

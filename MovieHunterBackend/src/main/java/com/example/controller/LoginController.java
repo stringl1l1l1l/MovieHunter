@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.entity.LoginUserWithCode;
 import com.example.entity.LoginUserWithCodePwd;
+import com.example.entity.LoginUserWithPwd;
 import com.example.entity.ResponseResult;
 import com.example.jsr303.LoginOperation;
 import com.example.service.LoginService;
@@ -26,9 +27,9 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @ApiOperation("登录，并返回token")
-    @PostMapping("/login")
-    public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCodePwd user){
-        ResponseResult result = loginService.login(user);
+    @PostMapping("/loginWithPwd")
+    public ResponseResult loginWithPwd(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithPwd user){
+        ResponseResult result = loginService.loginWithPwd(user);
         if(result.getCode() == 200)
             logger.info("用户 { " + user.getEmail() + "} 登录成功");
         return result;
