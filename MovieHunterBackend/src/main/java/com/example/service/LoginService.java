@@ -1,12 +1,11 @@
 package com.example.service;
 
 import com.example.entity.LoginUserWithCode;
-import com.example.entity.LoginUserWithPwd;
+import com.example.entity.LoginUserWithCodePwd;
 import com.example.entity.ResponseResult;
-import com.example.entity.User;
 
 public interface LoginService {
-    ResponseResult login(LoginUserWithPwd user);
+    ResponseResult login(LoginUserWithCodePwd user);
 
 //    ResponseResult register(LoginUserWithPwd user);
 
@@ -16,5 +15,5 @@ public interface LoginService {
 
     ResponseResult loginWithCode(LoginUserWithCode user);
 
-    ResponseResult registerWithCode(LoginUserWithCode user);
+    ResponseResult register(LoginUserWithCodePwd user);
 }
