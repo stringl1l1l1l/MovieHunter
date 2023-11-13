@@ -46,7 +46,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 设置页面标题
-                .title("空闲停车位实时查询系统")
+                .title("电影推荐系统")
                 // 设置接口描述
                 .description("测试")
                 // 设置版本

@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +30,9 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户手机号",position = 1)
     private String phone;
 
+    @Pattern(
+            regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",
+            message = "邮箱不符合规范")
     @ApiModelProperty(value = "用户邮箱",position = 2)
     private String email;
 
@@ -42,6 +44,9 @@ public class User implements Serializable {
     @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
     @ApiModelProperty(value = "密码",position = 4)
     private String password;
+
+    @ApiModelProperty(value = "验证码",hidden = true)
+    private String code;
 
     @ApiModelProperty(value = "逻辑删除状态",hidden = true)
     @Max(value = 1, message = "格式错误")
