@@ -1,18 +1,20 @@
 package com.example.service;
 
+import com.example.entity.LoginUserWithCode;
+import com.example.entity.LoginUserWithPwd;
 import com.example.entity.ResponseResult;
 import com.example.entity.User;
 
 public interface LoginService {
-    ResponseResult login(User user);
+    ResponseResult login(LoginUserWithPwd user);
 
-    ResponseResult register(User user);
+//    ResponseResult register(LoginUserWithPwd user);
 
     ResponseResult logout();
 
-    ResponseResult sendMsg(User user);
+    ResponseResult sendMsg(String email);
 
-    ResponseResult loginWithCode(User user);
+    ResponseResult loginWithCode(LoginUserWithCode user);
 
-    ResponseResult registerWithCode(User user);
+    ResponseResult registerWithCode(LoginUserWithCode user);
 }

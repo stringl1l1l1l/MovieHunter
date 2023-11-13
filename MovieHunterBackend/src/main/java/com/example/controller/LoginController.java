@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.entity.LoginUserWithCode;
+import com.example.entity.LoginUserWithPwd;
 import com.example.entity.ResponseResult;
 import com.example.entity.User;
 import com.example.jsr303.LoginOperation;
@@ -25,21 +27,21 @@ public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    @ApiOperation("注册，并返回token")
+    @ApiOperation("登录，并返回token")
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) User user){
+    public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithPwd user){
         ResponseResult result = loginService.login(user);
         if(result.getCode() == 200)
-            logger.info("用户 { 用户名: " + user.getUsername() + "} 登录成功");
+            logger.info("用户 { " + user.getUserId() + "} 登录成功");
         return result;
     }
 
-    @ApiOperation("注册后登录，并返回token")
-    @PostMapping("/register")
-    public ResponseResult register(@RequestBody @Valid @Validated(value = {LoginOperation.class}) User user){
-        ResponseResult result = loginService.register(user);
+    @ApiOperation("使用邮箱验证码注册，并返回token")
+    @PostMapping("/registerWithCode")
+    public ResponseResult registerWithCode(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCode user){
+        ResponseResult result = loginService.registerWithCode(user);
         if(result.getCode() == 200)
-            logger.info("用户 { 用户名: " + user.getUsername() + "} 注册成功");
+            logger.info("用户 { " + user.getUserId() + "} 注册成功");
         return result;
     }
 
@@ -53,17 +55,17 @@ public class LoginController {
     }
 
     @ApiOperation("发送验证码")
-    @PostMapping("/sendMsg")
-    public ResponseResult sendMsg(@RequestBody User user) {
-        ResponseResult result = loginService.sendMsg(user);
+    @GetMapping("/sendMsg/{email}")
+    public ResponseResult sendMsg(@PathVariable String email) {
+        ResponseResult result = loginService.sendMsg(email);
         if(result.getCode() == 200)
-            logger.info("用户 { 用户名: " + user.getUsername() + "} 验证码发送成功");
+            logger.info("邮箱 { " + email + "} 验证码发送成功");
         return result;
     }
 
     @ApiOperation("验证码登录")
     @PostMapping("/loginWithCode")
-    public ResponseResult loginWithCode(@RequestBody User user) {
-        return null;
+    public ResponseResult loginWithCode(@RequestBody LoginUserWithCode user) {
+        return loginService.loginWithCode(user);
     }
 }

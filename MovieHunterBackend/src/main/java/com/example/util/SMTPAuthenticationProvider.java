@@ -1,7 +1,8 @@
 package com.example.util;
 
-import com.example.entity.LoginUserWithCode;
+import com.example.entity.LoginUser;
 import com.example.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,39 +10,47 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
+@Component
 public class SMTPAuthenticationProvider implements AuthenticationProvider {
 
+    @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
     private RedisCache redisCache;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = (authentication.getPrincipal() == null) ? null
                 : authentication.getName();
-        LoginUserWithCode user = (LoginUserWithCode) userDetailsService.loadUserByUsername(email);
-        if(user == null) {
+        LoginUser loginUser = (LoginUser) userDetailsService.loadUserByUsername(email);
+        if(loginUser == null) {
             // todo:数据库中不存在该邮箱对应用户
+            System.out.println("数据库中不存在该邮箱对应用户");
         }
         else {
             // todo:查询缓存中验证码是否和credential一致
             String credentials = (String) authentication.getCredentials();
-            String codeInCache = redisCache.getCacheObject("code:" + user.getUserId());
+            String codeInCache = redisCache.getCacheObject("code:" + loginUser.getUser().getEmail());
             if(credentials == null) {
                 // todo:未输入验证码
+                System.out.println("未输入验证码");
             }
-            else if (StringUtils.isEmpty(codeInCache)) {
+            else if (codeInCache.isEmpty()) {
                 // todo:redis中验证码为空或失效
+                System.out.println("redis中验证码为空或失效");
             }
             else if(!credentials.equals(codeInCache)){
                 // todo:验证码不匹配
+                System.out.println("验证码不匹配");
             }
         }
-        return new SMTPAuthenticationToken(user, user.getAuthorities());
+        return new SMTPAuthenticationToken(loginUser, loginUser.getAuthorities());
     }
 
     @Override

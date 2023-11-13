@@ -1,27 +1,31 @@
 package com.example.filter;
 
 import com.example.util.SMTPAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class SMTPAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
+@Component
+public class SMTPAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     public static final String FORM_EMAIL_KEY = "email";
     public static final String FORM_CODE_KEY = "code";
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/loginWithCode",
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/filter/loginWithCode",
             "POST");
 
     private boolean postOnly = true;
 
-    public SMTPAuthenticationProcessingFilter() {
+    public SMTPAuthenticationFilter() {
         super(DEFAULT_ANT_PATH_REQUEST_MATCHER);
     }
 
@@ -53,5 +57,11 @@ public class SMTPAuthenticationProcessingFilter extends AbstractAuthenticationPr
 
     protected void setDetails(HttpServletRequest request, SMTPAuthenticationToken authRequest) {
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+    }
+
+    @Override
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 }

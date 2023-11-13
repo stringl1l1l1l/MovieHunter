@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class LoginUserWithPassword implements UserDetails {
+public class LoginUser implements UserDetails {
     private User user;
 
     private List<String> permissions;
@@ -21,7 +21,7 @@ public class LoginUserWithPassword implements UserDetails {
     @JSONField(serialize = false)
     private List<SimpleGrantedAuthority> authorities;
 
-    public LoginUserWithPassword(User user, List<String> permissions) {
+    public LoginUser(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
     }
@@ -32,13 +32,6 @@ public class LoginUserWithPassword implements UserDetails {
             return authorities;
         }
         //把permissions中String类型的权限信息封装成SimpleGrantedAuthority对象
-        //普通方法
-//       authorities = new ArrayList<>();
-//        for (String permission : permissions) {
-//            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission);
-//            authorities.add(authority);
-//        }
-         //函数式编程方法
         authorities = permissions.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
@@ -52,7 +45,7 @@ public class LoginUserWithPassword implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override
