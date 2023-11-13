@@ -86,10 +86,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResponseResult sendMsg(String email) {
-        String code = ValidateCodeUtils.generateNumValidateCode(4).toString();
+        Integer code = null;
         try {
             // 生成随机验证码并发送到指定邮箱
-            SendEmailUtils.sendAuthCodeEmail(email, code);
+            code = SendEmailUtils.sendAuthCodeEmail(email);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +106,9 @@ public class LoginServiceImpl implements LoginService {
         SMTPAuthenticationToken authenticationToken = new SMTPAuthenticationToken(user.getEmail(), user.getCode());
         Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
 
-        String userid = user.getUserId();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        String userid = loginUser.getUser().getUserId();
+
         String jwt = JwtUtil.createJWT(userid);
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
@@ -119,9 +121,19 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult register(LoginUserWithCodePwd user) {
         User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
         if (Objects.isNull(u)) {
-            // 验证邮箱有效性
-            SMTPAuthenticationToken authenticationToken = new SMTPAuthenticationToken(user.getEmail(), user.getCode());
-            Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
+            // 发送验证码验证邮箱有效性
+            try {
+                SendEmailUtils.sendAuthCodeEmail(user.getEmail());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseResult<>(500, "验证码发送失败");
+            }
+
+            // 检查输入的验证码是否和缓存中一致
+            String codeInCache = redisCache.getCacheObject("code:" + user.getEmail());
+            if(!Objects.equals(codeInCache, user.getCode())) {
+                return new ResponseResult<>(500, "验证码不匹配，请重新检查");
+            }
 
             // 用户数据插入数据库
             user.setPassword(passwordEncoder.encode(user.getPassword()));

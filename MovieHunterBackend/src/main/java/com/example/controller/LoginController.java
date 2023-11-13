@@ -30,7 +30,7 @@ public class LoginController {
     public ResponseResult login(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCodePwd user){
         ResponseResult result = loginService.login(user);
         if(result.getCode() == 200)
-            logger.info("用户 { " + user.getUserId() + "} 登录成功");
+            logger.info("用户 { " + user.getEmail() + "} 登录成功");
         return result;
     }
 
@@ -39,7 +39,7 @@ public class LoginController {
     public ResponseResult register(@RequestBody @Valid @Validated(value = {LoginOperation.class}) LoginUserWithCodePwd user){
         ResponseResult result = loginService.register(user);
         if(result.getCode() == 200)
-            logger.info("用户 { " + user.getUserId() + "} 注册成功");
+            logger.info("用户 { " + user.getEmail() + "} 注册成功");
         return result;
     }
 
