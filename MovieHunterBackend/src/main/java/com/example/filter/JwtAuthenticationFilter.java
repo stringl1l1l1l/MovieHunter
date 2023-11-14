@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseJWT(token);
             userId = claims.getSubject();
         } catch (Exception e) {
-           logger.error("异常信息：", e);
+            logger.error("异常信息：", e);
         }
         //从redis中获取对象
         String key = "login:" + userId;

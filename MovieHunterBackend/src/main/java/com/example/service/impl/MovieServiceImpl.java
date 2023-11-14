@@ -27,12 +27,16 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> findAllMovies() {
-        return movieMapper.selectList(new LambdaQueryWrapper<>());
+        return movieMapper.selectList(new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0));
     }
 
     @Override
     public Movie findMovieById(Long id) {
-        return movieMapper.selectById(id);
+        return movieMapper.selectOne(
+                new LambdaQueryWrapper<Movie>()
+                        .eq(Movie::getMovieId, id)
+                        .eq(Movie::getDelFlag, 0)
+        );
     }
 
     @Override
