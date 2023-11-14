@@ -1,7 +1,6 @@
 package com.example.config;
 
 import com.example.filter.JwtAuthenticationFilter;
-import com.example.filter.SMTPAuthenticationFilter;
 import com.example.util.SMTPAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,9 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SMTPAuthenticationProvider smtpAuthenticationProvider;
-
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -84,8 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于登录接口 使用匿名访问
                 .antMatchers("/user/getUserInfo/**"
                         ,"/user/parseToken/**").permitAll()
-                .antMatchers("/login*",
-                        "/register*",
+                .antMatchers("/loginWithCode",
+                        "/loginWithPwd",
+                        "/register",
                         "/sendMsg/**",
                         "/doc.html",
                         "/swagger-ui.html",

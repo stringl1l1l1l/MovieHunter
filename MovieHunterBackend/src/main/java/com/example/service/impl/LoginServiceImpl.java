@@ -9,6 +9,7 @@ import com.example.mapper.UserRoleMapper;
 import com.example.service.LoginService;
 import com.example.util.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,17 +50,16 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult loginWithPwd(LoginUserWithPwd user) {
         //数据库中查询用户是否存在
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
-        if (Objects.isNull(authentication)) {
-            throw new RuntimeException("登录失败");
+        Authentication authentication;
+
+        try {
+            authentication = authenticationManagerBean.authenticate(authenticationToken);
+        }  catch (BadCredentialsException ex) {
+            throw new BadCredentialsException("认证失败，请检查用户名或密码");
         }
 
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        //查询当前用户是否已经登录
-//        Object cacheObject = redisCache.getCacheObject("login:" + loginUser.getUser().getUserId());
-//        if(!Objects.isNull(cacheObject)){
-//            return new ResponseResult(400,"您已在登录状态，无需重复登录");
-//        }
+
         //认证通过，使用userid生成一个jwt jwt存入ResponseResult返回
         String userid = loginUser.getUser().getUserId();
         String jwt = JwtUtil.createJWT(userid);
@@ -67,7 +67,6 @@ public class LoginServiceImpl implements LoginService {
         map.put("token", jwt);
         //把完整的用户信息存入redis  userid作为key
         redisCache.setCacheObject("login:" + userid, loginUser);
-
         return new ResponseResult<Map>(200, "登录成功", map);
     }
 
@@ -86,7 +85,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResponseResult sendMsg(String email) {
-        Integer code = null;
+        String code = null;
         try {
             // 生成随机验证码并发送到指定邮箱
             code = SendEmailUtils.sendAuthCodeEmail(email);

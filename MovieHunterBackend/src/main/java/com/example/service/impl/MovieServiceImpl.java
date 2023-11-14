@@ -36,8 +36,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> findMoviesByGenresMask(int mask) {
-       return movieMapper.findMoviesByGenresMask(mask);
+    public IPage<Movie> findMoviesByGenresMask(int mask, int pageNum, int pageSize) {
+       return movieMapper.selectPage(new Page<>(pageNum, pageSize),
+               new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0)
+                       .apply("(genres_mask & {0}) > 0", mask)
+       );
     }
 
     @Override
@@ -46,7 +49,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> findMoviesByRegionsMask(int mask) {
-        return movieMapper.findMoviesByRegionsMask(mask);
+    public IPage<Movie> findMoviesByRegionsMask(int mask, int pageNum, int pageSize) {
+        return movieMapper.selectPage(new Page<>(pageNum, pageSize),
+                new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0)
+                        .apply("(regions_mask & {0}) > 0", mask)
+        );
     }
 }

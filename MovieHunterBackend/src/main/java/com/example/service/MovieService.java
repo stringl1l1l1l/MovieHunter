@@ -12,9 +12,9 @@ public interface MovieService {
 
     Movie findMovieById(Long id);
 
-    List<Movie> findMoviesByGenresMask(int mask);
+    IPage<Movie> findMoviesByGenresMask(int mask, int pageNum, int pageSize);
 
     IPage<Movie> findMoviesByPages(int pageNum, int pageSize);
 
-    List<Movie> findMoviesByRegionsMask(int mask);
+    IPage<Movie> findMoviesByRegionsMask(int mask, int pageNum, int pageSize);
 }

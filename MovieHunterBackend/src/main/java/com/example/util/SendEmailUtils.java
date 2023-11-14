@@ -16,7 +16,7 @@ public class SendEmailUtils {
      * @param email  接收邮箱
      * @return  void
      */
-    public static int sendAuthCodeEmail(String email) throws Exception{
+    public static String sendAuthCodeEmail(String email) throws Exception{
 
         HtmlEmail mail = new HtmlEmail();
 
@@ -34,12 +34,12 @@ public class SendEmailUtils {
         /*设置邮件的主题*/
         mail.setSubject("MovieHunter登录验证码");
         /*设置邮件的内容*/
-        int code = ValidateCodeUtils.generateNumValidateCode(4);
+        Integer code = ValidateCodeUtils.generateNumValidateCode(4);
         mail.setMsg("尊敬的用户你好! MovieHunter登录验证码为: " + code + " (有效期为一分钟)");
         //发送
         mail.send();
 
-        return code;
+        return code.toString();
     }
 
     public static void main(String[] args) throws Exception {
