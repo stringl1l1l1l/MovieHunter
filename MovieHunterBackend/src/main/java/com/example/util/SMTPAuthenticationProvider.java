@@ -41,9 +41,9 @@ public class SMTPAuthenticationProvider implements AuthenticationProvider {
                 // todo:未输入验证码
                 throw new BadCredentialsException("未输入验证码");
             }
-            else if (codeInCache.isEmpty()) {
+            else if (codeInCache == null || codeInCache.isEmpty()) {
                 // todo:redis中验证码为空或失效
-                throw new BadCredentialsException("需要发送验证码");
+                throw new BadCredentialsException("不存在有效的验证码，请发送验证码");
             }
             else if(!credentials.equals(codeInCache)){
                 // todo:验证码不匹配

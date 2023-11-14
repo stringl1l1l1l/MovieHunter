@@ -52,16 +52,16 @@ public class MovieController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据电影类别查询电影")
     @GetMapping("/findMoviesByGenresMask/{mask}")
-    public ResponseResult findMoviesByGenresMask(@PathVariable Integer mask) {
-        List<Movie> movies = movieService.findMoviesByGenresMask(mask);
+    public ResponseResult findMoviesByGenresMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+        IPage<Movie> movies = movieService.findMoviesByGenresMask(mask, pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movies);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据上映地区查询电影")
     @GetMapping("/findMoviesByRegionsMask/{mask}")
-    public ResponseResult findMoviesByRegionsMask(@PathVariable Integer mask) {
-        List<Movie> movies = movieService.findMoviesByRegionsMask(mask);
+    public ResponseResult findMoviesByRegionsMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+        IPage<Movie> movies = movieService.findMoviesByRegionsMask(mask, pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movies);
     }
 }
