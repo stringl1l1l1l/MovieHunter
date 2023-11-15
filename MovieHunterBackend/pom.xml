@@ -12,6 +12,7 @@
     <artifactId>MovieHunterBackend</artifactId>
     <version>0.0.1</version>
     <name>MovieHunterBackend</name>
+    <packaging>war</packaging>
     <properties>
         <java.version>1.8</java.version>
     </properties>

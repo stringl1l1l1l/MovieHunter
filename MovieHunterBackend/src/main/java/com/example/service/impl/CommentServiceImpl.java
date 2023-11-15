@@ -21,15 +21,11 @@ public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentMapper commentMapper;
 
-    @Resource
-    private MovieMapper movieMapper;
-
     @Override
     public Comment findCommentById(Long id) {
         return commentMapper.selectOne(
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getCommentId, id)
-                        .eq(Comment::getDelFlag, 0)
         );
     }
 
@@ -38,7 +34,6 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.selectPage(new Page<>(pageNum, pageSize),
                     new LambdaQueryWrapper<Comment>()
                             .eq(Comment::getMovieId, movieId)
-                            .eq(Comment::getDelFlag, 0)
             );
     }
 
@@ -47,7 +42,6 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.selectPage(new Page<>(pageNum, pageSize),
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getUserId, userId)
-                        .eq(Comment::getDelFlag, 0)
         );
     }
 }

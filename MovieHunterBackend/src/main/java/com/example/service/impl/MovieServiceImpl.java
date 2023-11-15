@@ -20,14 +20,9 @@ public class MovieServiceImpl implements MovieService {
     @Resource
     private MovieMapper movieMapper;
 
-//    @Override
-//    public List<Movie> showAllMovies() {
-//        return ;
-//    }
-
     @Override
-    public List<Movie> findAllMovies() {
-        return movieMapper.selectList(new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0));
+    public IPage<Movie> findAllMovies(Integer pageNum, Integer pageSize) {
+        return movieMapper.selectPage(new Page<>(pageNum, pageSize), null);
     }
 
     @Override
@@ -35,15 +30,13 @@ public class MovieServiceImpl implements MovieService {
         return movieMapper.selectOne(
                 new LambdaQueryWrapper<Movie>()
                         .eq(Movie::getMovieId, id)
-                        .eq(Movie::getDelFlag, 0)
         );
     }
 
     @Override
     public IPage<Movie> findMoviesByGenresMask(int mask, int pageNum, int pageSize) {
        return movieMapper.selectPage(new Page<>(pageNum, pageSize),
-               new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0)
-                       .apply("(genres_mask & {0}) > 0", mask)
+               new LambdaQueryWrapper<Movie>().apply("(genres_mask & {0}) > 0", mask)
        );
     }
 
@@ -55,8 +48,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public IPage<Movie> findMoviesByRegionsMask(int mask, int pageNum, int pageSize) {
         return movieMapper.selectPage(new Page<>(pageNum, pageSize),
-                new LambdaQueryWrapper<Movie>().eq(Movie::getDelFlag, 0)
-                        .apply("(regions_mask & {0}) > 0", mask)
+                new LambdaQueryWrapper<Movie>().apply("(regions_mask & {0}) > 0", mask)
         );
     }
 }

@@ -29,6 +29,14 @@ public class MovieController {
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("分页查询所有电影")
+    @GetMapping("/findAllMovies")
+    public ResponseResult findAllMovies(@RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
+        IPage<Movie> movie = movieService.findAllMovies(pageNum, pageSize);
+        return new ResponseResult<>(200, "操作成功", movie);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据ID查询电影")
     @GetMapping("/findMovieById/{id}")
     public ResponseResult findMovieById(@PathVariable Long id) {

@@ -27,12 +27,12 @@ public class Favorite implements Serializable {
     private Long favoriteId;
 
     @ApiModelProperty(value = "用户ID",position = 1)
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "收藏夹名称",position = 2)
     private String name;
 
-    @ApiModelProperty(value = "最近更新时间",position = 3)
+    @ApiModelProperty(value = "最近更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
