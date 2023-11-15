@@ -8,7 +8,7 @@ import java.util.List;
 public interface MovieService {
 //    List<Movie> showAllMovies();
 
-    List<Movie> findAllMovies();
+    IPage<Movie> findAllMovies(Integer pageNum, Integer pageSize);
 
     Movie findMovieById(Long id);
 
