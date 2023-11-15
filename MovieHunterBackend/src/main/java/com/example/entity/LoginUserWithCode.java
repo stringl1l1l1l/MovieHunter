@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("验证码登录用户类")
 public class LoginUserWithCode implements Serializable{
 
     private static final long serialVersionUID = -5100464565667956619L;

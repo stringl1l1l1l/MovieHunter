@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("验证码密码登录用户类")
 public class LoginUserWithCodePwd implements Serializable {
 
     private static final long serialVersionUID = 633328115305436341L;

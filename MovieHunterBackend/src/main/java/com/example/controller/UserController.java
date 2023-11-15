@@ -136,15 +136,15 @@ public class UserController {
         return new ResponseResult<Map>(200, "操作成功", map);
     }
 
-    @GetMapping("/getUserInfo/{token}")
-    public ResponseResult getUserInfo(@PathVariable String token) {
-        Map<String, Object> userInfo = userService.getUserInfo(token);
-        if (Objects.isNull(userInfo)) {
-            return new ResponseResult<>(400, "操作失败");
-        } else {
-            return new ResponseResult<>(200, "解析成功", userInfo);
-        }
-    }
+//    @GetMapping("/getUserInfo/{token}")
+//    public ResponseResult getUserInfo(@PathVariable String token) {
+//        Map<String, Object> userInfo = userService.getUserInfo(token);
+//        if (Objects.isNull(userInfo)) {
+//            return new ResponseResult<>(400, "操作失败");
+//        } else {
+//            return new ResponseResult<>(200, "解析成功", userInfo);
+//        }
+//    }
 
     @ApiOperation("token解析")
     @GetMapping("/parseToken/{token}")
