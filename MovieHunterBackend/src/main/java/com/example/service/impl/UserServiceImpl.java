@@ -54,12 +54,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectById(id);
     }
 
-    @Override
-    public User findUserByPhoneNum(String phone) {
-        return userMapper.selectOne(
-                new LambdaQueryWrapper<User>().eq(User::getPhoneNum, phone)
-        );
-    }
+//    @Override
+//    public User findUserByPhoneNum(String phone) {
+//        return userMapper.selectOne(
+//                new LambdaQueryWrapper<User>().eq(User::getPhoneNum, phone)
+//        );
+//    }
 
     @Override
     public User findUserByUsername(String username) {
@@ -108,7 +108,6 @@ public class UserServiceImpl implements UserService {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getUserId, user.getUserId())
                 .set(User::getUsername, user.getUsername())
-                .set(User::getPhoneNum, user.getPhoneNum())
                 .set(User::getPassword, user.getPassword())
                 .set(User::getDelFlag, user.getDelFlag());
 
@@ -146,7 +145,7 @@ public class UserServiceImpl implements UserService {
     public User parseToken(String token) {
         try {
             Claims claims = JwtUtil.parseJWT(token);
-            long id = Long.parseLong(claims.getSubject());
+            String id = claims.getSubject();
             return userMapper.selectById(id);
         } catch (Exception e) {
             e.printStackTrace();

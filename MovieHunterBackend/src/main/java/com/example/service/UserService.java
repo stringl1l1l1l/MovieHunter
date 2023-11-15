@@ -16,7 +16,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    User findUserByPhoneNum(String phone);
+//    User findUserByPhoneNum(String phone);
 
     List<User> findUsersByMap(Map<String, Object> map);
 

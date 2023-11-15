@@ -29,11 +29,11 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户名",position = 3)
     private String username;
 
-    @Pattern(
-            regexp = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$",
-            message = "手机号不符合规范")
-    @ApiModelProperty(value = "用户手机号",position = 1)
-    private String phoneNum;
+//    @Pattern(
+//            regexp = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$",
+//            message = "手机号不符合规范")
+//    @ApiModelProperty(value = "用户手机号",position = 1)
+//    private String phoneNum;
 
     @ApiModelProperty(value = "用户邮箱",position = 2)
     private String email;

@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.entity.FavoriteMovie;
+import com.example.entity.Movie;
 import com.example.entity.ResponseResult;
 import com.example.entity.Favorite;
 import com.example.service.FavoriteService;
@@ -71,5 +73,26 @@ public class FavoriteController {
     @PostMapping("/setFavouriteById")
     public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite) {
         return new ResponseResult<>(200, "操作成功", favoriteService.setFavouriteById(favorite));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("添加指定movie到指定收藏夹")
+    @PutMapping("/insertMovieToFavorite")
+    public ResponseResult insertMovieToFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) {
+        return new ResponseResult<>(200, "操作成功", favoriteService.insertMovieToFavorite(favoriteMovie));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:delete')")
+    @ApiOperation("删除指定收藏夹中的指定电影")
+    @DeleteMapping("/deleteMovieInFavorite")
+    public ResponseResult deleteMovieInFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) {
+        return new ResponseResult<>(200, "操作成功", favoriteService.deleteMovieInFavorite(favoriteMovie));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("查询指定收藏夹的所有电影")
+    @GetMapping("/findAllMoviesInFavorite/{favoriteId}")
+    public ResponseResult findAllMoviesInFavorite(@PathVariable Long favoriteId) {
+        return new ResponseResult<>(200, "操作成功", favoriteService.findAllMoviesInFavorite(favoriteId));
     }
 }
