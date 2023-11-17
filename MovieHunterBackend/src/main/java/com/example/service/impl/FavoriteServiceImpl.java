@@ -88,8 +88,15 @@ public class FavoriteServiceImpl implements FavoriteService {
             movieIds.add(elem.getMovieId());
         }
 
-        return movieMapper.selectList(new LambdaQueryWrapper<Movie>()
-                .in(Movie::getMovieId, movieIds)
+        if (movieIds.size() == 0)
+            return new ArrayList<>();
+        else
+            return movieMapper.selectList(new LambdaQueryWrapper<Movie>()
+                    .in(Movie::getMovieId, movieIds)
         );
+    }
+
+    public int deleteFavoriteById(Long favoriteId) {
+        return favoriteMapper.deleteById(favoriteId);
     }
 }
