@@ -17,4 +17,6 @@ public interface MovieService {
     IPage<Movie> findMoviesByPages(int pageNum, int pageSize);
 
     IPage<Movie> findMoviesByRegionsMask(int mask, int pageNum, int pageSize);
+
+    IPage<Movie> findMoviesByName(String name, int pageNum, int pageSize);
 }

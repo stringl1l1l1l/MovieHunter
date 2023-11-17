@@ -32,4 +32,11 @@ public class CommentController {
     public ResponseResult findCommentsByUserId(@PathVariable String userId, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
         return new ResponseResult<>(200, "操作成功", commentService.findCommentsByUserId(userId, pageNum, pageSize));
     }
+
+    @PreAuthorize(value = "hasAuthority('sys:delete')")
+    @ApiOperation("删除当前用户指定ID的评论")
+    @DeleteMapping("/deleteCommentById/{id}")
+    public ResponseResult deleteCommentById(@PathVariable Long id) {
+        return new ResponseResult<>(200, "操作成功", commentService.deleteCommentById(id));
+    }
 }

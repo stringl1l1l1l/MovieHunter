@@ -20,4 +20,6 @@ public interface FavoriteService {
     int deleteMovieInFavorite(FavoriteMovie favoriteMovie);
 
     List<Movie> findAllMoviesInFavorite(Long favoriteId);
+
+    int deleteFavoriteById(Long favoriteId);
 }

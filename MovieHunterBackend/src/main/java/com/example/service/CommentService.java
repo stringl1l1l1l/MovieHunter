@@ -13,4 +13,6 @@ public interface CommentService {
     IPage<Comment> findCommentsByMovieId(Long movieId, Integer pageNum, Integer pageSize);
 
     IPage<Comment> findCommentsByUserId(String userId, Integer pageNum, Integer pageSize);
+
+    int deleteCommentById(Long id);
 }

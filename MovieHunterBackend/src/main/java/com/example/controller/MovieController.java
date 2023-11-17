@@ -72,4 +72,11 @@ public class MovieController {
         IPage<Movie> movies = movieService.findMoviesByRegionsMask(mask, pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movies);
     }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("模糊查询电影")
+    @GetMapping("/findMoviesByName/{name}")
+    public ResponseResult deleteFavoriteById(@PathVariable String name, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+        return new ResponseResult<>(200, "操作成功", movieService.findMoviesByName(name, pageNum, pageSize));
+    }
 }

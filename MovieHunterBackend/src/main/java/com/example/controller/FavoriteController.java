@@ -8,7 +8,6 @@ import com.example.service.FavoriteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +93,12 @@ public class FavoriteController {
     @GetMapping("/findAllMoviesInFavorite/{favoriteId}")
     public ResponseResult findAllMoviesInFavorite(@PathVariable Long favoriteId) {
         return new ResponseResult<>(200, "操作成功", favoriteService.findAllMoviesInFavorite(favoriteId));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:delete')")
+    @ApiOperation("删除指定收藏夹")
+    @DeleteMapping("/deleteFavoriteById/{favoriteId}")
+    public ResponseResult deleteFavoriteById(@PathVariable Long favoriteId) {
+        return new ResponseResult<>(200, "操作成功", favoriteService.deleteFavoriteById(favoriteId));
     }
 }

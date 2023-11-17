@@ -44,4 +44,9 @@ public class CommentServiceImpl implements CommentService {
                         .eq(Comment::getUserId, userId)
         );
     }
+
+    @Override
+    public int deleteCommentById(Long id) {
+        return commentMapper.deleteById(id);
+    }
 }
