@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseResult handleValidException(Exception ex){
-        if(ex instanceof MethodArgumentNotValidException) {
+    public ResponseResult handleValidException(Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
             logger.error("数据校验错误:{}，异常类型:{}", e.getMessage(), e.getClass());
             BindingResult bindingResult = e.getBindingResult();

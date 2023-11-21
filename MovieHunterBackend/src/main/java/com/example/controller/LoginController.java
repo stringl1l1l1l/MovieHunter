@@ -67,4 +67,10 @@ public class LoginController {
     public ResponseResult loginWithCode(@RequestBody LoginUserWithCode user) {
         return loginService.loginWithCode(user);
     }
+
+    @ApiOperation("重设密码")
+    @PostMapping("/resetPwdWithCode")
+    public ResponseResult resetPwdWithCode(@RequestBody LoginUserWithCodePwd user) {
+        return loginService.resetPwdWithCode(user);
+    }
 }

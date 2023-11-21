@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@ApiModel(value = "权限实体类",description = "存储角色的具体权限")
+@ApiModel(value = "权限实体类", description = "存储角色的具体权限")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +28,6 @@ public class Menu implements Serializable {
     @ApiModelProperty("权限指令字符串")
     private String permission;
 
-    @ApiModelProperty(value = "逻辑删除标识",hidden = true)
+    @ApiModelProperty(value = "逻辑删除标识", hidden = true)
     private Integer delFlag;
 }

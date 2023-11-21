@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -79,10 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 对于登录接口 使用匿名访问
                 .antMatchers("/user/getUserInfo/**"
-                        ,"/user/parseToken/**").permitAll()
+                        , "/user/parseToken/**").permitAll()
                 .antMatchers("/loginWithCode",
                         "/loginWithPwd",
                         "/register",
+                        "/resetPwdWithCode",
                         "/sendMsg/**",
                         "/doc.html",
                         "/swagger-ui.html",
@@ -90,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/v2/**",
                         "/charts"
-                        ).anonymous()
+                ).anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 

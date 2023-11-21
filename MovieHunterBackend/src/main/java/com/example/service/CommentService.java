@@ -10,9 +10,9 @@ public interface CommentService {
 
     Comment findCommentById(Long id);
 
-    IPage<Comment> findCommentsByMovieId(Long movieId, Integer pageNum, Integer pageSize);
+    IPage<Comment> findCommentsByMovieId(Long movieId, String token, Integer pageNum, Integer pageSize) throws Exception;
 
-    IPage<Comment> findCommentsByUserId(String userId, Integer pageNum, Integer pageSize);
+    IPage<Comment> findCommentsByUserId(String userId, String token, Integer pageNum, Integer pageSize) throws Exception;
 
     int deleteCommentById(Long id);
 

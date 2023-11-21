@@ -31,49 +31,49 @@ public class PermissionController {
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/showAllRoles")
-    public ResponseResult showAllRoles(){
+    public ResponseResult showAllRoles() {
         return new ResponseResult<>(200, "操作成功", roleService.showAllRoles());
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/findAllRoles")
-    public ResponseResult findAllRoles(){
+    public ResponseResult findAllRoles() {
         return new ResponseResult<>(200, "操作成功", roleService.findAllRoles());
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/showAllRolePermission")
-    public ResponseResult showAllRolePermission(){
+    public ResponseResult showAllRolePermission() {
         return new ResponseResult<>(200, "操作成功", menuService.showAllRolePermission());
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/showPermissionMenu")
-    public ResponseResult showPermissionMenu(){
+    public ResponseResult showPermissionMenu() {
         return new ResponseResult<>(200, "操作成功", menuService.showPermissionMenu());
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/findPermissionMenu")
-    public ResponseResult findPermissionMenu(){
+    public ResponseResult findPermissionMenu() {
         return new ResponseResult<>(200, "操作成功", menuService.findPermissionMenu());
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/findAllRolesOfOneUser/{id}")
-    public ResponseResult findAllRolesOfOneUser(@PathVariable String id){
+    public ResponseResult findAllRolesOfOneUser(@PathVariable String id) {
         return new ResponseResult<>(200, "操作成功", roleService.findAllRolesOfOneUser(Long.parseLong(id)));
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @PostMapping("/insertUserRole")
-    public ResponseResult insertUserRole(@RequestBody List<UserRole> list){
+    public ResponseResult insertUserRole(@RequestBody List<UserRole> list) {
         int res = 0;
-        for (UserRole userRole:list) {
+        for (UserRole userRole : list) {
             res += roleService.insertUserRole(userRole);
         }
         Map<String, Integer> map = new HashMap<>();
-        map.put("影响行数",res);
+        map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
     }
 
@@ -138,13 +138,13 @@ public class PermissionController {
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @PostMapping("/insertRoleMenu")
-    public ResponseResult insertRoleMenu(@RequestBody List<RoleMenu> list){
+    public ResponseResult insertRoleMenu(@RequestBody List<RoleMenu> list) {
         int res = 0;
-        for (RoleMenu roleMenu:list) {
+        for (RoleMenu roleMenu : list) {
             res += menuService.insertRoleMenu(roleMenu);
         }
         Map<String, Integer> map = new HashMap<>();
-        map.put("影响行数",res);
+        map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
     }
 
@@ -152,7 +152,7 @@ public class PermissionController {
     @PostMapping("/deleteRoleMenu")
     public ResponseResult deleteRoleMenu(@RequestBody List<RoleMenu> list) {
         int res = 0;
-        for (RoleMenu roleMenu:list) {
+        for (RoleMenu roleMenu : list) {
             res += menuService.deleteRoleMenu(roleMenu);
         }
         Map<String, Integer> map = new HashMap<>();

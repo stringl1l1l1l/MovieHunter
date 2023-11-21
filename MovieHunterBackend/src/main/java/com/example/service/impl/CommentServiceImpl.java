@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Comment;
+import com.example.entity.Likes;
 import com.example.entity.Movie;
 import com.example.entity.User;
 import com.example.mapper.CommentMapper;
+import com.example.mapper.LikesMapper;
 import com.example.mapper.MovieMapper;
 import com.example.service.CommentService;
 import com.example.service.UserService;
@@ -17,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service("commentService")
@@ -27,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     private CommentMapper commentMapper;
 
     @Resource
-    private UserService userService;
+    private LikesMapper likesMapper;
 
     @Override
     public Comment findCommentById(Long id) {
@@ -38,19 +43,67 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public IPage<Comment> findCommentsByMovieId(Long movieId, Integer pageNum, Integer pageSize) {
-        return commentMapper.selectPage(new Page<>(pageNum, pageSize),
+    public IPage<Comment> findCommentsByMovieId(Long movieId, String token, Integer pageNum, Integer pageSize) throws Exception {
+        IPage<Comment> page = commentMapper.selectPage(new Page<>(pageNum, pageSize),
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getMovieId, movieId)
         );
+        List<Comment> commentList = page.getRecords();
+
+        Claims claims = JwtUtil.parseJWT(token);
+        String curUserId = claims.getSubject();
+
+        // 获取commentId列表
+        List<Long> commentIdList = new ArrayList<>();
+        commentList.forEach((elem) -> commentIdList.add(elem.getCommentId()));
+
+        if (!commentIdList.isEmpty()) {
+            // 判断当前用户是否已点赞
+            List<Likes> likesList = likesMapper.selectList(new LambdaQueryWrapper<Likes>()
+                    .eq(Likes::getUserId, curUserId)
+                    .in(Likes::getCommentId, commentIdList)
+            );
+            List<Long> votedCommentIdList = new ArrayList<>();
+            likesList.forEach((elem) -> votedCommentIdList.add(elem.getCommentId()));
+
+            commentList.forEach((elem) -> {
+                if (votedCommentIdList.contains(elem.getCommentId()))
+                    elem.setIsVoted(true);
+            });
+        }
+        return page;
     }
 
     @Override
-    public IPage<Comment> findCommentsByUserId(String userId, Integer pageNum, Integer pageSize) {
-        return commentMapper.selectPage(new Page<>(pageNum, pageSize),
+    public IPage<Comment> findCommentsByUserId(String userId, String token, Integer pageNum, Integer pageSize) throws Exception {
+        IPage<Comment> page = commentMapper.selectPage(new Page<>(pageNum, pageSize),
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getUserId, userId)
         );
+        List<Comment> commentList = page.getRecords();
+
+        Claims claims = JwtUtil.parseJWT(token);
+        String curUserId = claims.getSubject();
+
+        // 获取commentId列表
+        List<Long> commentIdList = new ArrayList<>();
+        commentList.forEach((elem) -> commentIdList.add(elem.getCommentId()));
+
+        if (!commentIdList.isEmpty()) {
+            // 判断当前用户是否已点赞
+            List<Likes> likesList = likesMapper.selectList(new LambdaQueryWrapper<Likes>()
+                    .eq(Likes::getUserId, curUserId)
+                    .in(Likes::getCommentId, commentIdList)
+            );
+            List<Long> votedCommentIdList = new ArrayList<>();
+            likesList.forEach((elem) -> votedCommentIdList.add(elem.getCommentId()));
+
+            commentList.forEach((elem) -> {
+                if (votedCommentIdList.contains(elem.getCommentId()))
+                    elem.setIsVoted(true);
+            });
+        }
+        return page;
     }
 
     @Override

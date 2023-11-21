@@ -17,4 +17,6 @@ public interface LoginService {
     ResponseResult loginWithCode(LoginUserWithCode user);
 
     ResponseResult register(LoginUserWithCodePwd user);
+
+    ResponseResult resetPwdWithCode(LoginUserWithCodePwd user);
 }

@@ -18,20 +18,20 @@ public class LoginUserWithCodePwd implements Serializable {
 
     private static final long serialVersionUID = 633328115305436341L;
 
-    @ApiModelProperty(value = "用户id",hidden = true)
+    @ApiModelProperty(value = "用户id", hidden = true)
     private String userId;
 
     @Pattern(
             regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",
             message = "邮箱不符合规范")
-    @ApiModelProperty(value = "用户邮箱",position = 1)
+    @ApiModelProperty(value = "用户邮箱", position = 1)
     private String email;
 
     @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
-    @ApiModelProperty(value = "用户密码",position = 2)
+    @ApiModelProperty(value = "用户密码", position = 2)
     private String password;
 
 
-    @ApiModelProperty(value = "验证码",position = 3)
+    @ApiModelProperty(value = "验证码", position = 3)
     private String code;
 }

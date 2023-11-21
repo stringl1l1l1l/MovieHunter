@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.entity.Comment;
 import com.example.entity.ResponseResult;
 import com.example.service.CommentService;
 import com.example.service.LikesService;
@@ -26,7 +27,7 @@ public class LikesController {
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("判断对于给定的评论id列表中当前登录用户是否点赞")
     @PostMapping("/judgeVotedByCommentIdList")
-    public ResponseResult findLikesByCurUser(@RequestBody List<Long> commentList, @RequestHeader String token) throws Exception {
+    public ResponseResult judgeVotedByCommentIdList(@RequestBody List<Comment> commentList, @RequestHeader String token) throws Exception {
         return new ResponseResult<>(200, "操作成功", likesService.judgeVotedByCommentIdList(commentList, token));
     }
 

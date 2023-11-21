@@ -41,6 +41,7 @@ public class SwaggerConfig {
 
     /**
      * 构建api文档的详细信息
+     *
      * @return
      */
     private ApiInfo apiInfo() {

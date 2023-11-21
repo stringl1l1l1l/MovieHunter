@@ -33,9 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
 
         //若token不存在
-        if(!StringUtils.hasText(token)) {
+        if (!StringUtils.hasText(token)) {
             //放行
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
             return;
         }
         //token存在，解析token
@@ -49,14 +49,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //从redis中获取对象
         String key = "login:" + userId;
         LoginUser loginUser = redisCache.getCacheObject(key);
-        if(Objects.isNull(loginUser)) {
+        if (Objects.isNull(loginUser)) {
             throw new RuntimeException("用户未登录");
         }
         //将用户信息存入SecurityContext，并设置为已授权，第三个参数不修改默认调用抽象的getAuthorities()方法
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser,null, loginUser.getAuthorities());
+                new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

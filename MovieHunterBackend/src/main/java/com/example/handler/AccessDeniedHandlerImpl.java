@@ -19,6 +19,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(), "您的权限不足，无法访问");
         String json = JSON.toJSONString(result);
-        WebUtils.renderString(httpServletResponse,json);
+        WebUtils.renderString(httpServletResponse, json);
     }
 }
