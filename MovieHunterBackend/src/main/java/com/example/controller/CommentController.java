@@ -26,15 +26,15 @@ public class CommentController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据电影ID找到相关评论")
     @GetMapping("/findCommentsByMovieId/{movieId}")
-    public ResponseResult findCommentsByMovieId(@PathVariable Long movieId, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
-        return new ResponseResult<>(200, "操作成功", commentService.findCommentsByMovieId(movieId, pageNum, pageSize));
+    public ResponseResult findCommentsByMovieId(@PathVariable Long movieId, @RequestHeader String token, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", commentService.findCommentsByMovieId(movieId, token, pageNum, pageSize));
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据用户ID找到相关评论")
     @GetMapping("/findCommentsByUserId/{userId}")
-    public ResponseResult findCommentsByUserId(@PathVariable String userId, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
-        return new ResponseResult<>(200, "操作成功", commentService.findCommentsByUserId(userId, pageNum, pageSize));
+    public ResponseResult findCommentsByUserId(@PathVariable String userId, @RequestHeader String token, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", commentService.findCommentsByUserId(userId, token, pageNum, pageSize));
     }
 
     @PreAuthorize(value = "hasAuthority('sys:delete')")

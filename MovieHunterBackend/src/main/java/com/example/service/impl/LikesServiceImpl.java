@@ -28,12 +28,12 @@ public class LikesServiceImpl implements LikesService {
     private CommentMapper commentMapper;
 
     @Override
-    public Map<Long, Boolean> judgeVotedByCommentIdList(List<Long> commentIdList, String token) throws Exception {
+    public Map<Long, Boolean> judgeVotedByCommentIdList(List<Comment> commentList, String token) throws Exception {
         Claims claims = JwtUtil.parseJWT(token);
         String userId = claims.getSubject();
 
         Map<Long, Boolean> res = new HashMap<>();
-        commentIdList.forEach((elem) -> res.put(elem, false));
+        commentList.forEach((elem) -> res.put(elem.getCommentId(), false));
 
         List<Likes> likesList = likesMapper.selectList(new LambdaQueryWrapper<Likes>().eq(Likes::getUserId, userId));
         likesList.forEach((elem) -> {

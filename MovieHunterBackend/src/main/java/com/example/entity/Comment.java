@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -23,7 +25,7 @@ import java.time.LocalDateTime;
 public class Comment implements Serializable {
     private static final long serialVersionUID = 601767974071095251L;
 
-    @ApiModelProperty(value = "评论ID", hidden = true)
+    @ApiModelProperty(value = "评论ID")
     @TableId(type = IdType.AUTO)
     private Long commentId;
 
@@ -42,10 +44,15 @@ public class Comment implements Serializable {
 
     @ApiModelProperty(value = "评论发表时间", hidden = true)
     @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy年MM月dd日 HH:mm:ss")
     private LocalDateTime commentTime;
 
     @ApiModelProperty(value = "评论点赞数", hidden = true)
     private Integer votes;
+
+    @ApiModelProperty(value = "评论是否点赞", hidden = true)
+    @TableField(exist = false)
+    private Boolean isVoted = false;
 
     @ApiModelProperty(value = "逻辑删除状态", hidden = true)
     @Max(value = 1, message = "格式错误")

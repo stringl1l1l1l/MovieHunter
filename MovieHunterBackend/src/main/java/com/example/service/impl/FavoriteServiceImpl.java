@@ -40,10 +40,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public int updateFavouriteById(Favorite favorite) {
-        return favoriteMapper.update(favorite,
-                new LambdaQueryWrapper<Favorite>()
-                        .eq(Favorite::getFavoriteId, favorite.getFavoriteId())
-        );
+        return favoriteMapper.updateById(favorite);
     }
 
     @Override
@@ -84,7 +81,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         );
 
         List<Long> movieIds = new ArrayList<>();
-        for (FavoriteMovie elem : favoriteMovieList ) {
+        for (FavoriteMovie elem : favoriteMovieList) {
             movieIds.add(elem.getMovieId());
         }
 
@@ -93,7 +90,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         else
             return movieMapper.selectList(new LambdaQueryWrapper<Movie>()
                     .in(Movie::getMovieId, movieIds)
-        );
+            );
     }
 
     public int deleteFavoriteById(Long favoriteId) {

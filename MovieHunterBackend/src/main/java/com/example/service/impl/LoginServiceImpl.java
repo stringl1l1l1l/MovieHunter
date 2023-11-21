@@ -54,7 +54,7 @@ public class LoginServiceImpl implements LoginService {
 
         try {
             authentication = authenticationManagerBean.authenticate(authenticationToken);
-        }  catch (BadCredentialsException ex) {
+        } catch (BadCredentialsException ex) {
             throw new BadCredentialsException("认证失败，请检查用户名或密码");
         }
 
@@ -89,8 +89,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             // 生成随机验证码并发送到指定邮箱
             code = SendEmailUtils.sendAuthCodeEmail(email);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseResult<>(500, "验证码发送失败");
         }
@@ -120,17 +119,9 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult register(LoginUserWithCodePwd user) {
         User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
         if (Objects.isNull(u)) {
-            // 发送验证码验证邮箱有效性
-            try {
-                SendEmailUtils.sendAuthCodeEmail(user.getEmail());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ResponseResult<>(500, "验证码发送失败");
-            }
-
-            // 检查输入的验证码是否和缓存中一致
+            // 检查输入的验证码是否和缓存中一致，验证邮箱有效性
             String codeInCache = redisCache.getCacheObject("code:" + user.getEmail());
-            if(!Objects.equals(codeInCache, user.getCode())) {
+            if (!Objects.equals(codeInCache, user.getCode())) {
                 return new ResponseResult<>(500, "验证码不匹配，请重新检查");
             }
 
@@ -156,10 +147,33 @@ public class LoginServiceImpl implements LoginService {
                             .getRoleId())
             );
 
-            // 在user_info表中添加用户个人信息
-//            userInfoMapper.insert(new UserInfo(null, user.getUserId(), null, "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getUsername()));
             return new ResponseResult<Map>(200, "注册成功", map);
         }
         return new ResponseResult<>(500, "用户已存在,请登录");
+    }
+
+    @Override
+    public ResponseResult resetPwdWithCode(LoginUserWithCodePwd user) {
+        // 查询用户是否存在
+        User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
+
+        if (!Objects.isNull(u)) {
+            // 检查输入的验证码是否和缓存中一致
+            String codeInCache = redisCache.getCacheObject("code:" + user.getEmail());
+            if (!Objects.equals(codeInCache, user.getCode())) {
+                return new ResponseResult<>(500, "验证码不匹配或已过期，请重新检查");
+            }
+
+            User newUser = new User();
+            newUser.setEmail(user.getEmail());
+            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            int res = userMapper.update(newUser, new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
+            Map<String, Integer> map = new HashMap<>();
+            map.put("影响行数", res);
+
+            return new ResponseResult<>(200, "密码修改成功", map);
+        }
+        return new ResponseResult<>(500, "该用户不存在");
     }
 }

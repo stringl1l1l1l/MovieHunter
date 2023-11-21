@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 public class Likes implements Serializable {
     private static final long serialVersionUID = 6152813149972484534L;
 
-    @ApiModelProperty(value = "用户ID",position = 1)
+    @ApiModelProperty(value = "用户ID", position = 1)
     @TableId(type = IdType.NONE)
     private String userId;
 
-    @ApiModelProperty(value = "评论ID",position = 2)
+    @ApiModelProperty(value = "评论ID", position = 2)
     private Long commentId;
 }

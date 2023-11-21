@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.entity.Comment;
 import com.example.entity.Likes;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 public interface LikesService {
 
-    Map<Long, Boolean> judgeVotedByCommentIdList(List<Long> commentIdList, String token) throws Exception;
+    Map<Long, Boolean> judgeVotedByCommentIdList(List<Comment> commentList, String token) throws Exception;
 
     List<Likes> findLikesByCurUser(String token) throws Exception;
 

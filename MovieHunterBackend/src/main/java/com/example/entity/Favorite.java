@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,14 @@ public class Favorite implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long favoriteId;
 
-    @ApiModelProperty(value = "用户ID",position = 1)
+    @ApiModelProperty(value = "用户ID", position = 1)
     private String userId;
 
-    @ApiModelProperty(value = "收藏夹名称",position = 2)
+    @ApiModelProperty(value = "收藏夹名称", position = 2)
     private String name;
 
     @ApiModelProperty(value = "最近更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy年MM月dd日 HH:mm:ss")
     private LocalDateTime updateTime;
 }

@@ -19,6 +19,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(), "认证失败，请检查登录状态");
         String json = JSON.toJSONString(result);
-        WebUtils.renderString(httpServletResponse,json);
+        WebUtils.renderString(httpServletResponse, json);
     }
 }
