@@ -52,7 +52,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         wrapper.eq(Favorite::getFavoriteId, favorite.getFavoriteId())
                 .set(Favorite::getName, favorite.getName())
-                .set(Favorite::getDelFlag, favorite.getDelFlag());
+                .set(Favorite::getUserId, favorite.getUserId());
 
         return favoriteMapper.update(favorite, wrapper);
     }

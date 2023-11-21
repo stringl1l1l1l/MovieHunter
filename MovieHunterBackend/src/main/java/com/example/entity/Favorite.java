@@ -35,9 +35,4 @@ public class Favorite implements Serializable {
     @ApiModelProperty(value = "最近更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
-    @ApiModelProperty(value = "逻辑删除状态",hidden = true)
-    @Max(value = 1, message = "格式错误")
-    @Min(value = 0, message = "格式错误")
-    private Integer delFlag;
 }
