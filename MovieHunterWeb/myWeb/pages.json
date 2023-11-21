@@ -1,0 +1,80 @@
+{
+	"easycom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	{
+		"path" : "pages/Login/LoginByEmail",
+		"style" : 
+		{
+			"navigationBarTitleText": "欢迎登录",
+			"enablePullDownRefresh": false,
+			"navigationBarBackgroundColor": "#edf4ed"  // douban
+		}
+	},
+	
+		{
+			"path" : "pages/recommendations/recommendations",
+			"style" : 
+			{
+				"navigationBarTitleText" : "找电影",
+				"enablePullDownRefresh" :  false,
+				"navigationBarBackgroundColor": "#edf4ed"  // douban
+			}
+		},
+		
+		{
+			"path" : "pages/UserInfo/UserInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人主页",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#edf4ed"  // douban
+			}
+		},
+		{
+			"path" : "pages/MovieInfo/MovieInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#edf4ed"  // douban
+			}
+		},
+		{
+			"path" : "pages/Login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "注册",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#edf4ed"  // douban
+			}
+		},
+		{
+			"path" : "pages/favorite/favorite",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom"
+	},
+	"uniIdRouter": {},
+	"condition" : {//Mode configuration, effective only during development period.
+		"current": 0,//Current active mode (index entry of list)
+		"list": [
+			{
+				"name": "",//mode name
+				"path": "",//startup page, can not be empty
+				"query": ""//The startup parameters are obtained in the onLoad function of the page.
+			}
+		]
+	}
+}
