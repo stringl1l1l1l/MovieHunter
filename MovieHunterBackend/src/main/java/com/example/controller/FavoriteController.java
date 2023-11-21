@@ -22,10 +22,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/favorite")
 public class FavoriteController {
-    
+
     @Resource
     private FavoriteService favoriteService;
-    
+
     @PreAuthorize(value = "hasAuthority('sys:put')")
     @ApiOperation("创建收藏夹")
     @PutMapping("/insertFavorite")
@@ -64,28 +64,40 @@ public class FavoriteController {
     @ApiOperation("增量更新收藏夹， null值不会更新")
     @PostMapping("/updateFavouriteById")
     public ResponseResult updateFavouriteById(@RequestBody @Valid Favorite favorite) {
-        return new ResponseResult<>(200, "操作成功", favoriteService.updateFavouriteById(favorite));
+        int res = favoriteService.updateFavouriteById(favorite);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("全量更新收藏夹， null值会更新")
     @PostMapping("/setFavouriteById")
     public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite) {
-        return new ResponseResult<>(200, "操作成功", favoriteService.setFavouriteById(favorite));
+        int res = favoriteService.setFavouriteById(favorite);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("添加指定movie到指定收藏夹")
     @PutMapping("/insertMovieToFavorite")
     public ResponseResult insertMovieToFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) {
-        return new ResponseResult<>(200, "操作成功", favoriteService.insertMovieToFavorite(favoriteMovie));
+        int res = favoriteService.insertMovieToFavorite(favoriteMovie);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:delete')")
     @ApiOperation("删除指定收藏夹中的指定电影")
     @DeleteMapping("/deleteMovieInFavorite")
     public ResponseResult deleteMovieInFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) {
-        return new ResponseResult<>(200, "操作成功", favoriteService.deleteMovieInFavorite(favoriteMovie));
+        int res = favoriteService.deleteMovieInFavorite(favoriteMovie);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
@@ -99,6 +111,9 @@ public class FavoriteController {
     @ApiOperation("删除指定收藏夹")
     @DeleteMapping("/deleteFavoriteById/{favoriteId}")
     public ResponseResult deleteFavoriteById(@PathVariable Long favoriteId) {
-        return new ResponseResult<>(200, "操作成功", favoriteService.deleteFavoriteById(favoriteId));
+        int res = favoriteService.deleteFavoriteById(favoriteId);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 }

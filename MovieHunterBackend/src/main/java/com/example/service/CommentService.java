@@ -15,4 +15,6 @@ public interface CommentService {
     IPage<Comment> findCommentsByUserId(String userId, Integer pageNum, Integer pageSize);
 
     int deleteCommentById(Long id);
+
+    int insertComment(Comment comment, String token) throws Exception;
 }

@@ -18,20 +18,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("点赞实体类")
-public class Like implements Serializable {
+public class Likes implements Serializable {
     private static final long serialVersionUID = 6152813149972484534L;
 
-    @ApiModelProperty(value = "点赞ID")
-    @TableId(type = IdType.AUTO)
-    private Long likeId;
-
     @ApiModelProperty(value = "用户ID",position = 1)
-    private Long userId;
+    @TableId(type = IdType.NONE)
+    private String userId;
 
     @ApiModelProperty(value = "评论ID",position = 2)
     private Long commentId;
-
-    @ApiModelProperty(value = "点赞时间",position = 3)
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime time;
 }
