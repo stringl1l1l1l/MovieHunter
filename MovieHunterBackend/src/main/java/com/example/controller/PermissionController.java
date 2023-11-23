@@ -62,7 +62,7 @@ public class PermissionController {
     @PreAuthorize(value = "hasAuthority('sys:manager')")
     @GetMapping("/findAllRolesOfOneUser/{id}")
     public ResponseResult findAllRolesOfOneUser(@PathVariable String id) {
-        return new ResponseResult<>(200, "操作成功", roleService.findAllRolesOfOneUser(Long.parseLong(id)));
+        return new ResponseResult<>(200, "操作成功", roleService.findAllRolesOfOneUser(id));
     }
 
     @PreAuthorize(value = "hasAuthority('sys:manager')")

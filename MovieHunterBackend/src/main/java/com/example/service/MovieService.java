@@ -19,4 +19,12 @@ public interface MovieService {
     IPage<Movie> findMoviesByRegionsMask(int mask, int pageNum, int pageSize);
 
     IPage<Movie> findMoviesByName(String name, int pageNum, int pageSize);
+
+    int deleteMovieById(Long id);
+
+    int updateMovieById(Movie movie);
+
+    int insertMovie(Movie movie);
+
+    int setMovieById(Movie movie);
 }

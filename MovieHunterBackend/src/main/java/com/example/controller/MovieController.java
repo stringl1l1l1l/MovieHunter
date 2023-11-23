@@ -14,7 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Api
@@ -31,7 +33,7 @@ public class MovieController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("分页查询所有电影")
     @GetMapping("/findAllMovies")
-    public ResponseResult findAllMovies(@RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
+    public ResponseResult findAllMovies(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
         IPage<Movie> movie = movieService.findAllMovies(pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movie);
     }
@@ -60,7 +62,7 @@ public class MovieController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据电影类别查询电影")
     @GetMapping("/findMoviesByGenresMask/{mask}")
-    public ResponseResult findMoviesByGenresMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+    public ResponseResult findMoviesByGenresMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
         IPage<Movie> movies = movieService.findMoviesByGenresMask(mask, pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movies);
     }
@@ -68,15 +70,55 @@ public class MovieController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据上映地区查询电影")
     @GetMapping("/findMoviesByRegionsMask/{mask}")
-    public ResponseResult findMoviesByRegionsMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+    public ResponseResult findMoviesByRegionsMask(@PathVariable Integer mask, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
         IPage<Movie> movies = movieService.findMoviesByRegionsMask(mask, pageNum, pageSize);
         return new ResponseResult<>(200, "操作成功", movies);
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("模糊查询电影")
-    @GetMapping("/findMoviesByName/{name}")
-    public ResponseResult deleteFavoriteById(@PathVariable String name, @RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "7")Integer pageSize) {
+    @GetMapping("/findMoviesByName")
+    public ResponseResult findMoviesByName(@RequestParam String name, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) {
         return new ResponseResult<>(200, "操作成功", movieService.findMoviesByName(name, pageNum, pageSize));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("删除电影")
+    @DeleteMapping("/deleteMovieById/{movieId}")
+    public ResponseResult deleteMovieById(@PathVariable Long movieId) {
+        int res = movieService.deleteMovieById(movieId);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("全量更新电影")
+    @PostMapping("/updateMovieById")
+    public ResponseResult updateMovieById(@RequestBody Movie movie) {
+        int res = movieService.updateMovieById(movie);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("增量更新电影")
+    @PostMapping("/setMovieById")
+    public ResponseResult setMovieById(@RequestBody Movie movie) {
+        int res = movieService.setMovieById(movie);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("添加电影")
+    @PutMapping("/insertMovie")
+    public ResponseResult insertMovie(@RequestBody Movie movie) {
+        int res = movieService.insertMovie(movie);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
     }
 }

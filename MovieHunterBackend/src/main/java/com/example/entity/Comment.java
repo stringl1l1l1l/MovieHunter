@@ -54,6 +54,10 @@ public class Comment implements Serializable {
     @TableField(exist = false)
     private Boolean isVoted = false;
 
+    @ApiModelProperty(value = "评论是否属于当前用户", hidden = true)
+    @TableField(exist = false)
+    private Boolean isOwned = false;
+
     @ApiModelProperty(value = "逻辑删除状态", hidden = true)
     @Max(value = 1, message = "格式错误")
     @Min(value = 0, message = "格式错误")

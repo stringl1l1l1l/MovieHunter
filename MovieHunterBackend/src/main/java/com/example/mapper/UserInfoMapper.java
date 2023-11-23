@@ -11,9 +11,9 @@ import java.util.Map;
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     @Select("SELECT introduction, avatar, name FROM user_info WHERE user_id = #{userId}")
-    Map<String, Object> getUserInfo(@Param("userId") Long userId);
+    Map<String, Object> getUserInfo(@Param("userId") String userId);
 
     @Select("SELECT role_name FROM view_user_role WHERE user_id = #{userId}")
-    List<String> getUserRoles(@Param("userId") Long userId);
+    List<String> getUserRoles(@Param("userId") String userId);
 
 }

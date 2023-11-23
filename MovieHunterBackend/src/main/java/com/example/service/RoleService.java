@@ -11,7 +11,7 @@ public interface RoleService {
 
     List<Role> findAllRoles();
 
-    List<Role> findAllRolesOfOneUser(Long userId);
+    List<Role> findAllRolesOfOneUser(String userId);
 
     int insertUserRole(UserRole userRole);
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public interface UserService {
     List<User> findAllUsers();
 
-    User findUserById(Long id);
+    User findUserById(String id);
 
     User findUserByUsername(String username);
 
@@ -20,7 +20,7 @@ public interface UserService {
 
     List<User> findUsersByMap(Map<String, Object> map);
 
-    int deleteUserById(Long id);
+    int deleteUserById(String id);
 
     int deleteUserByMap(Map<String, Object> map);
 

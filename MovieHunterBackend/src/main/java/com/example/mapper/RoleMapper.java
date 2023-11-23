@@ -21,7 +21,7 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> showAllRoles();
 
     @Select("SELECT * FROM view_user_role WHERE user_id = #{userId}")
-    List<Role> findAllRolesOfOneUser(@Param("userId") Long userId);
+    List<Role> findAllRolesOfOneUser(@Param("userId") String userId);
 
     @Update("UPDATE role SET del_flag = 0 WHERE role_id = #{roleId}")
     int restoreRoleById(@Param("roleId") Integer roleId);

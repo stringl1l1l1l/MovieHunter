@@ -27,7 +27,7 @@ public class LoginUserWithPwd implements Serializable {
     @ApiModelProperty(value = "用户邮箱", position = 1)
     private String email;
 
-    @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
+    @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "用户密码", position = 2)
     private String password;
 }

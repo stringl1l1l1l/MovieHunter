@@ -33,7 +33,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> findAllRolesOfOneUser(Long userId) {
+    public List<Role> findAllRolesOfOneUser(String userId) {
         return roleMapper.findAllRolesOfOneUser(userId);
     }
 
