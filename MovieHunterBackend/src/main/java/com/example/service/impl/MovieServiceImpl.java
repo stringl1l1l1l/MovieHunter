@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Movie;
@@ -58,6 +59,44 @@ public class MovieServiceImpl implements MovieService {
                 new LambdaQueryWrapper<Movie>().like(Movie::getName, name)
                         .or()
                         .like(Movie::getTags, name)
+        );
+    }
+
+    @Override
+    public int deleteMovieById(Long id) {
+        return movieMapper.deleteById(id);
+    }
+
+    @Override
+    public int updateMovieById(Movie movie) {
+        return movieMapper.updateById(movie);
+    }
+
+    @Override
+    public int insertMovie(Movie movie) {
+        return movieMapper.insert(movie);
+    }
+
+    @Override
+    public int setMovieById(Movie movie) {
+        return movieMapper.update(movie,
+                new LambdaUpdateWrapper<Movie>()
+                        .eq(Movie::getMovieId, movie.getMovieId())
+                        .set(Movie::getName, movie.getName())
+                        .set(Movie::getAlias, movie.getAlias())
+                        .set(Movie::getActors, movie.getActors())
+                        .set(Movie::getDirectors, movie.getDirectors())
+                        .set(Movie::getCover, movie.getCover())
+                        .set(Movie::getStoryline, movie.getStoryline())
+                        .set(Movie::getRegions, movie.getRegions())
+                        .set(Movie::getRegionsMask, movie.getRegionsMask())
+                        .set(Movie::getGenres, movie.getGenres())
+                        .set(Movie::getGenresMask, movie.getGenresMask())
+                        .set(Movie::getScore, movie.getScore())
+                        .set(Movie::getReleaseDate, movie.getReleaseDate())
+                        .set(Movie::getTags, movie.getTags())
+                        .set(Movie::getYear, movie.getYear())
+                        .set(Movie::getLanguages, movie.getLanguages())
         );
     }
 }

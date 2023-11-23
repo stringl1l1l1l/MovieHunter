@@ -37,7 +37,7 @@ public class UserController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("根据用户ID查询用户")
     @GetMapping("/findUserById/{id}")
-    public ResponseResult findUserById(@PathVariable Long id) {
+    public ResponseResult findUserById(@PathVariable String id) {
         User user = userService.findUserById(id);
         if (Objects.isNull(user)) {
             return new ResponseResult(200, "用户ID不存在");
@@ -61,13 +61,24 @@ public class UserController {
         return new ResponseResult<>(200, "操作成功", userPage);
     }
 
-    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
     @ApiOperation("根据用户名查询用户")
     @GetMapping("/findUserByUserName/{username}")
     public ResponseResult findUserByUserName(@PathVariable String username) {
         User user = userService.findUserByUsername(username);
         if (Objects.isNull(user))
-            return new ResponseResult(200, "用户名不存在");
+            return new ResponseResult(500, "用户名不存在");
+        else
+            return new ResponseResult<>(200, "操作成功", user);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("根据邮箱查询用户")
+    @GetMapping("/findUserByEmail/{email}")
+    public ResponseResult findUserByEmail(@PathVariable String email) {
+        User user = userService.findUserByEmail(email);
+        if (Objects.isNull(user))
+            return new ResponseResult(500, "邮箱不存在");
         else
             return new ResponseResult<>(200, "操作成功", user);
     }
@@ -92,7 +103,7 @@ public class UserController {
 
 
     @PreAuthorize(value = "hasAuthority('sys:put')")
-    @ApiOperation("根据提供用户的ID更新对应的用户, 增量更新, null值不会更新")
+    @ApiOperation("根据提供用户的ID更新对应的用户, 全量更新, null值会更新")
     @PutMapping("/updateUserById")
     public ResponseResult updateUserById(@RequestBody @Valid User user) {
         int res = userService.updateUserById(user);
@@ -102,7 +113,7 @@ public class UserController {
     }
 
     @PreAuthorize(value = "hasAuthority('sys:put')")
-    @ApiOperation("根据提供用户的ID覆盖对应的用户, 全量更新, null值会更新")
+    @ApiOperation("根据提供用户的ID覆盖对应的用户, 增量更新, null值不会更新")
     @PutMapping("/setUserById")
     public ResponseResult setUserById(@RequestBody @Valid @Validated(value = {SetOperation.class}) User user) {
         int res = userService.setUserById(user);
@@ -129,22 +140,22 @@ public class UserController {
     @PreAuthorize(value = "hasAuthority('sys:delete')")
     @ApiOperation("根据用户ID删除一条用户信息")
     @DeleteMapping("/deleteUserById/{id}")
-    public ResponseResult deleteUserById(@PathVariable Long id) {
+    public ResponseResult deleteUserById(@PathVariable String id) {
         int res = userService.deleteUserById(id);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<Map>(200, "操作成功", map);
     }
 
-//    @GetMapping("/getUserInfo/{token}")
-//    public ResponseResult getUserInfo(@PathVariable String token) {
-//        Map<String, Object> userInfo = userService.getUserInfo(token);
-//        if (Objects.isNull(userInfo)) {
-//            return new ResponseResult<>(400, "操作失败");
-//        } else {
-//            return new ResponseResult<>(200, "解析成功", userInfo);
-//        }
-//    }
+    @GetMapping("/getUserInfo/{token}")
+    public ResponseResult getUserInfo(@PathVariable String token) {
+        Map<String, Object> userInfo = userService.getUserInfo(token);
+        if (Objects.isNull(userInfo)) {
+            return new ResponseResult<>(400, "操作失败");
+        } else {
+            return new ResponseResult<>(200, "解析成功", userInfo);
+        }
+    }
 
     @ApiOperation("token解析")
     @GetMapping("/parseToken/{token}")

@@ -45,11 +45,6 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户头像",hidden = true)
     private String avatar;
 
-    @ApiModelProperty(value = "逻辑删除状态",hidden = true)
-    @Max(value = 1, message = "格式错误")
-    @Min(value = 0, message = "格式错误")
-    private Integer delFlag;
-
     public User(LoginUserWithCodePwd user) {
         this.setPassword(user.getPassword());
         this.setEmail(user.getEmail());

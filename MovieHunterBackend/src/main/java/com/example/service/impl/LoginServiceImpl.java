@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             authentication = authenticationManagerBean.authenticate(authenticationToken);
         } catch (BadCredentialsException ex) {
-            throw new BadCredentialsException("认证失败，请检查用户名或密码");
+            throw new BadCredentialsException("认证失败");
         }
 
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
@@ -111,7 +111,8 @@ public class LoginServiceImpl implements LoginService {
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
         //把完整的用户信息存入redis  userid作为key
-        redisCache.setCacheObject("login:" + userid, user);
+        redisCache.setCacheObject("login:" + userid, loginUser);
+        redisCache.deleteObject("code:" + user.getEmail());
         return new ResponseResult<Map>(200, "登录成功", map);
     }
 
@@ -146,7 +147,7 @@ public class LoginServiceImpl implements LoginService {
                                             .eq(Role::getRoleName, "用户"))
                             .getRoleId())
             );
-
+            redisCache.deleteObject("code:" + user.getEmail());
             return new ResponseResult<Map>(200, "注册成功", map);
         }
         return new ResponseResult<>(500, "用户已存在,请登录");
@@ -172,6 +173,7 @@ public class LoginServiceImpl implements LoginService {
             Map<String, Integer> map = new HashMap<>();
             map.put("影响行数", res);
 
+            redisCache.deleteObject("code:" + user.getEmail());
             return new ResponseResult<>(200, "密码修改成功", map);
         }
         return new ResponseResult<>(500, "该用户不存在");

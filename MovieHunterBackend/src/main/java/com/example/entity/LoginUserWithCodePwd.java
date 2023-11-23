@@ -27,11 +27,12 @@ public class LoginUserWithCodePwd implements Serializable {
     @ApiModelProperty(value = "用户邮箱", position = 1)
     private String email;
 
-    @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
+    @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "用户密码", position = 2)
     private String password;
 
 
     @ApiModelProperty(value = "验证码", position = 3)
+    @NotBlank(message = "验证码不能为空", groups = {LoginOperation.class})
     private String code;
 }

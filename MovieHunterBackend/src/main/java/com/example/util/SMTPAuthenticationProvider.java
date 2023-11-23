@@ -50,6 +50,7 @@ public class SMTPAuthenticationProvider implements AuthenticationProvider {
                 throw new BadCredentialsException("验证码不匹配");
             }
         }
+
         return new SMTPAuthenticationToken(loginUser, loginUser.getAuthorities());
     }
 

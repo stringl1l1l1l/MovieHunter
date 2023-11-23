@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(Long id) {
+    public User findUserById(String id) {
         return userMapper.selectById(id);
     }
 
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUserById(Long id) {
+    public int deleteUserById(String id) {
         return userMapper.deleteById(id);
     }
 
@@ -108,8 +108,7 @@ public class UserServiceImpl implements UserService {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getUserId, user.getUserId())
                 .set(User::getUsername, user.getUsername())
-                .set(User::getPassword, user.getPassword())
-                .set(User::getDelFlag, user.getDelFlag());
+                .set(User::getPassword, user.getPassword());
 
         return userMapper.update(user, wrapper);
     }
@@ -123,7 +122,7 @@ public class UserServiceImpl implements UserService {
     public List<String> getUserRoles(String token) {
         try {
             Claims claims = JwtUtil.parseJWT(token);
-            long id = Long.parseLong(claims.getSubject());
+            String id = claims.getSubject();
             return userInfoMapper.getUserRoles(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
     public Map<String, Object> getUserInfo(String token) {
         try {
             Claims claims = JwtUtil.parseJWT(token);
-            long id = Long.parseLong(claims.getSubject());
+            String id = claims.getSubject();
             return userInfoMapper.getUserInfo(id);
         } catch (Exception e) {
             e.printStackTrace();

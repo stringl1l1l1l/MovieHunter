@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional
 @Service("commentService")
@@ -53,12 +50,19 @@ public class CommentServiceImpl implements CommentService {
         Claims claims = JwtUtil.parseJWT(token);
         String curUserId = claims.getSubject();
 
+        // 设置当前评论是否属于当前用户的字段
+        commentList.forEach(elem -> {
+            if (Objects.equals(elem.getUserId(), curUserId)) {
+                elem.setIsOwned(true);
+            }
+        });
+
         // 获取commentId列表
         List<Long> commentIdList = new ArrayList<>();
         commentList.forEach((elem) -> commentIdList.add(elem.getCommentId()));
 
         if (!commentIdList.isEmpty()) {
-            // 判断当前用户是否已点赞
+            // 查出当前用户对当前评论的点赞情况
             List<Likes> likesList = likesMapper.selectList(new LambdaQueryWrapper<Likes>()
                     .eq(Likes::getUserId, curUserId)
                     .in(Likes::getCommentId, commentIdList)
@@ -66,10 +70,12 @@ public class CommentServiceImpl implements CommentService {
             List<Long> votedCommentIdList = new ArrayList<>();
             likesList.forEach((elem) -> votedCommentIdList.add(elem.getCommentId()));
 
+            // 设置当前用户是否已点赞的字段
             commentList.forEach((elem) -> {
                 if (votedCommentIdList.contains(elem.getCommentId()))
                     elem.setIsVoted(true);
             });
+
         }
         return page;
     }
@@ -84,6 +90,13 @@ public class CommentServiceImpl implements CommentService {
 
         Claims claims = JwtUtil.parseJWT(token);
         String curUserId = claims.getSubject();
+
+        // 设置当前评论是否属于当前用户的字段
+        if (Objects.equals(userId, curUserId)) {
+            commentList.forEach(elem -> {
+                elem.setIsOwned(true);
+            });
+        }
 
         // 获取commentId列表
         List<Long> commentIdList = new ArrayList<>();
