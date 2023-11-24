@@ -19,14 +19,13 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 1528247366805849494L;
 
-    @Min(value = 0,message = "格式错误")
+    @Length(max = 32, message = "ID格式错误")
     @ApiModelProperty(value = "用户ID")
     @TableId(type = IdType.ASSIGN_UUID)
     private String userId;
 
     @Length(max = 30, message = "用户名过长")
-//    @NotBlank(message = "用户名不能为空", groups = {LoginOperation.class})
-    @ApiModelProperty(value = "用户名",position = 3)
+    @ApiModelProperty(value = "用户名", position = 3)
     private String username;
 
 //    @Pattern(
@@ -35,14 +34,14 @@ public class User implements Serializable {
 //    @ApiModelProperty(value = "用户手机号",position = 1)
 //    private String phoneNum;
 
-    @ApiModelProperty(value = "用户邮箱",position = 2)
+    @ApiModelProperty(value = "用户邮箱", position = 2)
     private String email;
 
     @NotBlank(message = "密码不能为空", groups = {LoginOperation.class})
-    @ApiModelProperty(value = "密码",position = 4)
+    @ApiModelProperty(value = "密码", position = 4)
     private String password;
 
-    @ApiModelProperty(value = "用户头像",hidden = true)
+    @ApiModelProperty(value = "用户头像", hidden = true)
     private String avatar;
 
     public User(LoginUserWithCodePwd user) {
