@@ -15,11 +15,13 @@ public interface FavoriteService {
 
     int insertFavorite(Favorite favorite);
 
-    int insertMovieToFavorite(FavoriteMovie favoriteMovie);
+    int insertMovieToFavorite(FavoriteMovie favoriteMovie) throws Exception;
 
     int deleteMovieInFavorite(FavoriteMovie favoriteMovie);
 
     List<Movie> findAllMoviesInFavorite(Long favoriteId);
 
     int deleteFavoriteById(Long favoriteId);
+
+    int moveMovieToFavorite(FavoriteMovie favoriteMovie, Long newFavorite, String token) throws Exception;
 }
