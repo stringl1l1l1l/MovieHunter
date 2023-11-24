@@ -24,9 +24,9 @@ public interface UserService {
 
     int deleteUserByMap(Map<String, Object> map);
 
-    int updateUserById(User user);
+    int updateUserById(User user) throws Exception;
 
-    int setUserById(User user);
+    int setUserById(User user) throws Exception;
 
     int insertUser(User user);
 

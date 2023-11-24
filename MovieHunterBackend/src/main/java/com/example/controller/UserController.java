@@ -105,7 +105,7 @@ public class UserController {
     @PreAuthorize(value = "hasAuthority('sys:put')")
     @ApiOperation("根据提供用户的ID更新对应的用户, 全量更新, null值会更新")
     @PutMapping("/updateUserById")
-    public ResponseResult updateUserById(@RequestBody @Valid User user) {
+    public ResponseResult updateUserById(@RequestBody @Valid User user) throws Exception {
         int res = userService.updateUserById(user);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
@@ -115,7 +115,7 @@ public class UserController {
     @PreAuthorize(value = "hasAuthority('sys:put')")
     @ApiOperation("根据提供用户的ID覆盖对应的用户, 增量更新, null值不会更新")
     @PutMapping("/setUserById")
-    public ResponseResult setUserById(@RequestBody @Valid @Validated(value = {SetOperation.class}) User user) {
+    public ResponseResult setUserById(@RequestBody @Valid @Validated(value = {SetOperation.class}) User user) throws Exception {
         int res = userService.setUserById(user);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);

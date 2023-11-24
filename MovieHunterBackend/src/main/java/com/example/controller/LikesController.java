@@ -1,6 +1,8 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.entity.Comment;
+import com.example.entity.Likes;
 import com.example.entity.ResponseResult;
 import com.example.service.CommentService;
 import com.example.service.LikesService;
@@ -56,5 +58,12 @@ public class LikesController {
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("查询所有点赞")
+    @GetMapping("/findAllLikes")
+    public ResponseResult findAllLikes(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", likesService.findAllLikes(pageNum, pageSize));
     }
 }

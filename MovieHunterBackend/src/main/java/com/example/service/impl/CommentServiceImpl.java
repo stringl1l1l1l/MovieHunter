@@ -32,6 +32,11 @@ public class CommentServiceImpl implements CommentService {
     private LikesMapper likesMapper;
 
     @Override
+    public IPage<Comment> findAllComments(Integer pageNum, Integer pageSize) {
+        return commentMapper.selectPage(new Page<>(pageNum, pageSize), new LambdaQueryWrapper<>());
+    }
+
+    @Override
     public Comment findCommentById(Long id) {
         return commentMapper.selectOne(
                 new LambdaQueryWrapper<Comment>()
@@ -120,7 +125,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int deleteCommentById(Long id) {
+    public int deleteCommentById(Long id, String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+        if (!Objects.equals(commentMapper.selectById(id).getUserId(), userId))
+            throw new Exception("用户只能删除自己的评论");
         return commentMapper.deleteById(id);
     }
 
@@ -130,5 +139,10 @@ public class CommentServiceImpl implements CommentService {
         String userId = claims.getSubject();
         comment.setUserId(userId);
         return commentMapper.insert(comment);
+    }
+
+    @Override
+    public int deleteAnyCommentById(Long id) {
+        return commentMapper.deleteById(id);
     }
 }

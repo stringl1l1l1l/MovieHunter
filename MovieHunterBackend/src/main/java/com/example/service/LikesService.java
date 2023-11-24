@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.entity.Comment;
 import com.example.entity.Likes;
 
@@ -15,4 +16,6 @@ public interface LikesService {
     int voteCommentByCommentId(Long id, String token) throws Exception;
 
     int cancelVoteByCommentId(Long id, String token) throws Exception;
+
+    IPage<Likes> findAllLikes(int pageNum, int pageSize);
 }

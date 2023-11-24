@@ -79,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public int setMovieById(Movie movie) {
-        return movieMapper.update(movie,
+        return movieMapper.update(null,
                 new LambdaUpdateWrapper<Movie>()
                         .eq(Movie::getMovieId, movie.getMovieId())
                         .set(Movie::getName, movie.getName())

@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Transactional
 @Service("userService")
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByEmail(String email) {
         return userMapper.selectOne(
-                new LambdaQueryWrapper<User>().eq(User::getEmail, email)
+                new LambdaQueryWrapper<User>().eq(User::getEmail, email).or().eq(User::getUserId, email)
         );
     }
 
@@ -91,26 +92,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUserById(User user) {
+    public int updateUserById(User user) throws Exception {
         if (StringUtils.hasText(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(User::getUserId, user.getUserId());
-        return userMapper.update(user, wrapper);
+
+        User res = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
+        if (res != null && !Objects.equals(res.getUserId(), user.getUserId()))
+            throw new Exception("邮箱已存在");
+
+        return userMapper.updateById(user);
     }
 
     @Override
-    public int setUserById(User user) {
+    public int setUserById(User user) throws Exception {
         if (StringUtils.hasText(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        User res = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail()));
+        if (res != null && !Objects.equals(res.getUserId(), user.getUserId()))
+            throw new Exception("邮箱已存在");
+
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getUserId, user.getUserId())
                 .set(User::getUsername, user.getUsername())
-                .set(User::getPassword, user.getPassword());
+                .set(User::getPassword, user.getPassword())
+                .set(User::getAvatar, user.getAvatar())
+                .set(User::getEmail, user.getEmail());
 
-        return userMapper.update(user, wrapper);
+        return userMapper.update(null, wrapper);
     }
 
     @Override

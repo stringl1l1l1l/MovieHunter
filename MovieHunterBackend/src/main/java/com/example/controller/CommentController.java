@@ -40,8 +40,8 @@ public class CommentController {
     @PreAuthorize(value = "hasAuthority('sys:delete')")
     @ApiOperation("删除当前用户指定ID的评论")
     @DeleteMapping("/deleteCommentById/{id}")
-    public ResponseResult deleteCommentById(@PathVariable Long id) {
-        int res = commentService.deleteCommentById(id);
+    public ResponseResult deleteCommentById(@PathVariable Long id, @RequestHeader String token) throws Exception {
+        int res = commentService.deleteCommentById(id, token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
@@ -52,6 +52,30 @@ public class CommentController {
     @PutMapping("/insertComment")
     public ResponseResult insertComment(@RequestBody @Valid Comment comment, @RequestHeader String token) throws Exception {
         int res = commentService.insertComment(comment, token);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("查询所有评论")
+    @GetMapping("/findAllComments")
+    public ResponseResult findAllComments(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", commentService.findAllComments(pageNum, pageSize));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("根据ID找到评论")
+    @GetMapping("/findCommentById/{commentId}")
+    public ResponseResult findCommentById(@PathVariable Long commentId) throws Exception {
+        return new ResponseResult<>(200, "操作成功", commentService.findCommentById(commentId));
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("删除任意指定ID的评论")
+    @DeleteMapping("/deleteAnyCommentById/{id}")
+    public ResponseResult deleteAnyCommentById(@PathVariable Long id) {
+        int res = commentService.deleteAnyCommentById(id);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);

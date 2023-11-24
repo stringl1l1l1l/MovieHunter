@@ -58,8 +58,4 @@ public class Comment implements Serializable {
     @TableField(exist = false)
     private Boolean isOwned = false;
 
-    @ApiModelProperty(value = "逻辑删除状态", hidden = true)
-    @Max(value = 1, message = "格式错误")
-    @Min(value = 0, message = "格式错误")
-    private Integer delFlag;
 }
