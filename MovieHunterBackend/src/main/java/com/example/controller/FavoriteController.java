@@ -7,6 +7,7 @@ import com.example.entity.Favorite;
 import com.example.service.FavoriteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ResponseHeader;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -83,7 +84,7 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:get')")
     @ApiOperation("添加指定movie到指定收藏夹")
     @PutMapping("/insertMovieToFavorite")
-    public ResponseResult insertMovieToFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) {
+    public ResponseResult insertMovieToFavorite(@RequestBody @Valid FavoriteMovie favoriteMovie) throws Exception {
         int res = favoriteService.insertMovieToFavorite(favoriteMovie);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
@@ -112,6 +113,16 @@ public class FavoriteController {
     @DeleteMapping("/deleteFavoriteById/{favoriteId}")
     public ResponseResult deleteFavoriteById(@PathVariable Long favoriteId) {
         int res = favoriteService.deleteFavoriteById(favoriteId);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("影响行数", res);
+        return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:post')")
+    @ApiOperation("移动电影到指定收藏夹")
+    @PostMapping("/moveMovieToFavorite/{newFavoriteId}")
+    public ResponseResult moveMovieToFavorite(@RequestBody FavoriteMovie favoriteMovie, @PathVariable Long newFavoriteId, @RequestHeader String token) throws Exception {
+        int res = favoriteService.moveMovieToFavorite(favoriteMovie, newFavoriteId, token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);

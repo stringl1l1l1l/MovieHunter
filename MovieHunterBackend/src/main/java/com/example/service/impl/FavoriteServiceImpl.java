@@ -9,6 +9,8 @@ import com.example.mapper.FavoriteMapper;
 import com.example.mapper.FavoriteMovieMapper;
 import com.example.mapper.MovieMapper;
 import com.example.service.FavoriteService;
+import com.example.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,8 +62,14 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public int insertMovieToFavorite(FavoriteMovie favoriteMovie) {
-        return favoriteMovieMapper.insert(favoriteMovie);
+    public int insertMovieToFavorite(FavoriteMovie favoriteMovie) throws Exception {
+        FavoriteMovie res = favoriteMovieMapper.selectOne(new LambdaQueryWrapper<FavoriteMovie>()
+                .eq(FavoriteMovie::getFavoriteId, favoriteMovie.getFavoriteId())
+                .eq(FavoriteMovie::getMovieId, favoriteMovie.getMovieId()));
+        if (res == null)
+            return favoriteMovieMapper.insert(favoriteMovie);
+        else
+            throw new Exception("该电影已收藏至本收藏夹");
     }
 
     @Override
@@ -95,5 +103,28 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     public int deleteFavoriteById(Long favoriteId) {
         return favoriteMapper.deleteById(favoriteId);
+    }
+
+    @Override
+    public int moveMovieToFavorite(FavoriteMovie favoriteMovie, Long newFavorite, String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+
+        if (favoriteMapper.selectOne(new LambdaQueryWrapper<Favorite>()
+                .eq(Favorite::getFavoriteId, newFavorite)
+                .eq(Favorite::getUserId, userId)) == null)
+            throw new Exception("当前用户未拥有该收藏夹");
+
+        if (favoriteMovieMapper.selectOne(new LambdaQueryWrapper<FavoriteMovie>()
+                .eq(FavoriteMovie::getFavoriteId, newFavorite)
+                .eq(FavoriteMovie::getMovieId, favoriteMovie.getMovieId())) != null)
+            throw new Exception("该电影已收藏至本收藏夹");
+
+        return favoriteMovieMapper.update(favoriteMovie,
+                new LambdaUpdateWrapper<FavoriteMovie>()
+                        .eq(FavoriteMovie::getFavoriteId, favoriteMovie.getFavoriteId())
+                        .eq(FavoriteMovie::getMovieId, favoriteMovie.getMovieId())
+                        .set(FavoriteMovie::getFavoriteId, newFavorite)
+        );
     }
 }
