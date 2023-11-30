@@ -12,6 +12,7 @@ import com.example.mapper.CommentMapper;
 import com.example.mapper.LikesMapper;
 import com.example.mapper.MovieMapper;
 import com.example.service.CommentService;
+import com.example.service.LikesService;
 import com.example.service.UserService;
 import com.example.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -30,6 +31,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Resource
     private LikesMapper likesMapper;
+
+    @Resource
+    private LikesService likesService;
 
     @Override
     public IPage<Comment> findAllComments(Integer pageNum, Integer pageSize) {
@@ -144,5 +148,24 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int deleteAnyCommentById(Long id) {
         return commentMapper.deleteById(id);
+    }
+
+    @Override
+    public IPage<Comment> findVotedCommentsByCurUser(String token, Integer pageNum, Integer pageSize) throws Exception {
+        List<Likes> likesByCurUser = likesService.findLikesByCurUser(token);
+        List<Long> commentIdList = new ArrayList<>();
+        likesByCurUser.forEach(likes -> commentIdList.add(likes.getCommentId()));
+        if (commentIdList.isEmpty())
+            throw new Exception("当前用户没有点赞记录");
+
+        IPage<Comment> res = commentMapper.selectPage(new Page<>(pageNum, pageSize),
+                new LambdaQueryWrapper<Comment>().in(Comment::getCommentId, commentIdList));
+
+        for (Comment record : res.getRecords()) {
+            record.setIsVoted(true);
+            record.setIsOwned(true);
+        }
+
+        return res;
     }
 }

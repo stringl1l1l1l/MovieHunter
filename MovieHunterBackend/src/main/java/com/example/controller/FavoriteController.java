@@ -30,23 +30,8 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:put')")
     @ApiOperation("创建收藏夹")
     @PutMapping("/insertFavorite")
-    public ResponseResult insertFavorite(@RequestBody @Valid Favorite favorite) {
-        //若当前用户已有相同名字的收藏夹
-        List<Favorite> favoritesByUserId = favoriteService.findAllFavoritesByUserId(favorite.getUserId());
-
-        int flag = 0;
-        for (Favorite elem : favoritesByUserId) {
-            if (elem.getName().equals(favorite.getName())) {
-                flag = 1;
-                break;
-            }
-        }
-
-        if (flag == 1) {
-            return new ResponseResult<>(500, "已存在相同名称的收藏夹，请重新命名");
-        }
-
-        int res = favoriteService.insertFavorite(favorite);
+    public ResponseResult insertFavorite(@RequestBody @Valid Favorite favorite, @RequestHeader String token) throws Exception {
+        int res = favoriteService.insertFavorite(favorite, token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
 
@@ -64,8 +49,8 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("增量更新收藏夹， null值不会更新")
     @PostMapping("/updateFavouriteById")
-    public ResponseResult updateFavouriteById(@RequestBody @Valid Favorite favorite) {
-        int res = favoriteService.updateFavouriteById(favorite);
+    public ResponseResult updateFavouriteById(@RequestBody @Valid Favorite favorite, String token) throws Exception {
+        int res = favoriteService.updateFavouriteById(favorite,token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
@@ -74,8 +59,8 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("全量更新收藏夹， null值会更新")
     @PostMapping("/setFavouriteById")
-    public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite) {
-        int res = favoriteService.setFavouriteById(favorite);
+    public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite, String token) throws Exception {
+        int res = favoriteService.setFavouriteById(favorite,token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
@@ -99,6 +84,13 @@ public class FavoriteController {
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
+    }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("查询指定收藏夹的所有电影")
+    @GetMapping("/findFavoritesByCurUser")
+    public ResponseResult findFavoritesByCurUser(@RequestHeader String token) throws Exception {
+        return new ResponseResult<>(200, "操作成功", favoriteService.findFavoritesByCurUser(token));
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")

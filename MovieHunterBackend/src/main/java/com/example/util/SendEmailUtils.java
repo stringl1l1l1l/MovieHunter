@@ -11,6 +11,7 @@ public class SendEmailUtils {
     private static final String SMTP_EMAIL = "liwener200207@163.com";
     private static final String SMTP_PASSWORD_APP = "FZNDJMWHLYJRDWNY";
     private static final String SENDER_NAME = "MovieHunter";
+    public static final int LIFETIME_MIN = 5;
     /**
      * 发送验证码
      * @param email  接收邮箱
@@ -32,10 +33,10 @@ public class SendEmailUtils {
         /*接收的邮箱*/
         mail.addTo(email);
         /*设置邮件的主题*/
-        mail.setSubject("MovieHunter登录验证码");
+        mail.setSubject("MovieHunter验证码");
         /*设置邮件的内容*/
         Integer code = ValidateCodeUtils.generateNumValidateCode(4);
-        mail.setMsg("尊敬的用户你好! MovieHunter登录验证码为: " + code + " (有效期为一分钟)");
+        mail.setMsg("【MovieHunter】验证码: " + code + " ，" + LIFETIME_MIN + "分钟内有效");
         //发送
         mail.send();
 

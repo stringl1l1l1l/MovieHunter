@@ -63,22 +63,13 @@ public class LikesServiceImpl implements LikesService {
 
         if (likesMapper.selectOne(new LambdaQueryWrapper<Likes>()
                 .eq(Likes::getUserId, userId)
-                .eq(Likes::getCommentId,commentId)) != null)
+                .eq(Likes::getCommentId, commentId)) != null)
             throw new Exception("重复点赞");
 
         // 插入点赞记录到表中
         Likes like = new Likes(userId, commentId);
-        int res = likesMapper.insert(like);
 
-        // 插入成功后，评论总赞数+1
-        if (res == 1) {
-            LambdaUpdateWrapper<Comment> updateWrapper = new LambdaUpdateWrapper<>();
-            updateWrapper.eq(Comment::getCommentId, commentId); // 以 commentId 为条件进行更新
-            updateWrapper.setSql("votes = votes + 1"); // 设置 vote 字段的值加一
-
-            return commentMapper.update(new Comment(), updateWrapper);
-        } else
-            return 0;
+        return likesMapper.insert(like);
     }
 
     @Override
@@ -86,22 +77,28 @@ public class LikesServiceImpl implements LikesService {
         Claims claims = JwtUtil.parseJWT(token);
         String userId = claims.getSubject();
 
-        int res = likesMapper.delete(new LambdaQueryWrapper<Likes>()
+        return likesMapper.delete(new LambdaQueryWrapper<Likes>()
                 .eq(Likes::getUserId, userId)
                 .eq(Likes::getCommentId, id)
         );
-
-        if (res == 1) {
-            LambdaUpdateWrapper<Comment> updateWrapper = new LambdaUpdateWrapper<>();
-            updateWrapper.eq(Comment::getCommentId, id); // 以 commentId 为条件进行更新
-            updateWrapper.setSql("votes = votes - 1"); // 设置 vote 字段的值加一
-            return commentMapper.update(new Comment(), updateWrapper);
-        } else
-            return 0;
     }
 
     @Override
     public IPage<Likes> findAllLikes(int pageNum, int pageSize) {
         return likesMapper.selectPage(new Page<>(pageNum, pageSize), new LambdaQueryWrapper<>());
+    }
+
+    @Override
+    public IPage<Likes> findLikesById(String userId, Long commentId, Integer pageNum, Integer pageSize) {
+
+        if (userId != null && !userId.equals("")) {
+            return likesMapper.selectPage(new Page<>(pageNum, pageSize),
+                    new LambdaQueryWrapper<Likes>().eq(Likes::getUserId, userId));
+        } else if (commentId != null) {
+            return likesMapper.selectPage(new Page<>(pageNum, pageSize),
+                    new LambdaQueryWrapper<Likes>().eq(Likes::getCommentId, commentId));
+        }
+
+        return null;
     }
 }
