@@ -49,13 +49,7 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult loginWithPwd(LoginUserWithPwd user) {
         //数据库中查询用户是否存在
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        Authentication authentication;
-
-        try {
-            authentication = authenticationManagerBean.authenticate(authenticationToken);
-        } catch (BadCredentialsException ex) {
-            throw new BadCredentialsException("认证失败");
-        }
+        Authentication authentication = authenticationManagerBean.authenticate(authenticationToken);
 
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
@@ -148,7 +142,7 @@ public class LoginServiceImpl implements LoginService {
                             .getRoleId())
             );
             redisCache.deleteObject("code:" + user.getEmail());
-            userInfoMapper.insert(new UserInfo(null, user.getUserId(), null,"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getEmail()));
+            userInfoMapper.insert(new UserInfo(null, userId, null,"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getEmail()));
 
             return new ResponseResult<Map>(200, "注册成功", map);
         }

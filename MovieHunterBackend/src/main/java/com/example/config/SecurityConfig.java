@@ -1,6 +1,7 @@
 package com.example.config;
 
 import com.example.filter.JwtAuthenticationFilter;
+import com.example.util.PwdAuthenticationProvider;
 import com.example.util.SMTPAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private SMTPAuthenticationProvider smtpAuthenticationProvider;
 
     @Autowired
+    private PwdAuthenticationProvider pwdAuthenticationProvider;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -54,18 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(smtpAuthenticationProvider)
-                .authenticationProvider(authenticationProvider());
+                .authenticationProvider(pwdAuthenticationProvider);
     }
 
     @Override

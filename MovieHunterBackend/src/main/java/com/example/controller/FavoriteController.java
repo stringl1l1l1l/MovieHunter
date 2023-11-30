@@ -87,7 +87,7 @@ public class FavoriteController {
     }
 
     @PreAuthorize(value = "hasAuthority('sys:get')")
-    @ApiOperation("查询指定收藏夹的所有电影")
+    @ApiOperation("查询当前用户的所有收藏夹")
     @GetMapping("/findFavoritesByCurUser")
     public ResponseResult findFavoritesByCurUser(@RequestHeader String token) throws Exception {
         return new ResponseResult<>(200, "操作成功", favoriteService.findFavoritesByCurUser(token));
