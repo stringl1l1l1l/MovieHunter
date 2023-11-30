@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.entity.Favorite;
 import com.example.entity.FavoriteMovie;
 import com.example.entity.Movie;
+import com.example.entity.ResponseResult;
 import com.example.mapper.FavoriteMapper;
 import com.example.mapper.FavoriteMovieMapper;
 import com.example.mapper.MovieMapper;
@@ -41,12 +42,60 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public int updateFavouriteById(Favorite favorite) {
+    public List<Favorite> findFavoritesByCurUser(String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+
+        return favoriteMapper.selectList(
+                new LambdaQueryWrapper<Favorite>()
+                        .eq(Favorite::getUserId, userId)
+        );
+    }
+
+    @Override
+    public int updateFavouriteById(Favorite favorite, String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+        favorite.setUserId(userId);
+
+        //若当前用户已有相同名字的收藏夹
+        List<Favorite> favoritesByUserId = findAllFavoritesByUserId(userId);
+
+        int flag = 0;
+        for (Favorite elem : favoritesByUserId) {
+            if (elem.getName().equals(favorite.getName())) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 1) {
+            throw new Exception("已存在相同名称的收藏夹，请重新命名");
+        }
         return favoriteMapper.updateById(favorite);
     }
 
     @Override
-    public int setFavouriteById(Favorite favorite) {
+    public int setFavouriteById(Favorite favorite, String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+        favorite.setUserId(userId);
+
+        //若当前用户已有相同名字的收藏夹
+        List<Favorite> favoritesByUserId = findAllFavoritesByUserId(userId);
+
+        int flag = 0;
+        for (Favorite elem : favoritesByUserId) {
+            if (elem.getName().equals(favorite.getName())) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 1) {
+            throw new Exception("已存在相同名称的收藏夹，请重新命名");
+        }
+
         LambdaUpdateWrapper<Favorite> wrapper = new LambdaUpdateWrapper<>();
 
         wrapper.eq(Favorite::getFavoriteId, favorite.getFavoriteId())
@@ -57,7 +106,25 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public int insertFavorite(Favorite favorite) {
+    public int insertFavorite(Favorite favorite, String token) throws Exception {
+        Claims claims = JwtUtil.parseJWT(token);
+        String userId = claims.getSubject();
+        favorite.setUserId(userId);
+
+        //若当前用户已有相同名字的收藏夹
+        List<Favorite> favoritesByUserId = findAllFavoritesByUserId(userId);
+
+        int flag = 0;
+        for (Favorite elem : favoritesByUserId) {
+            if (elem.getName().equals(favorite.getName())) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 1) {
+            throw new Exception("已存在相同名称的收藏夹，请重新命名");
+        }
         return favoriteMapper.insert(favorite);
     }
 

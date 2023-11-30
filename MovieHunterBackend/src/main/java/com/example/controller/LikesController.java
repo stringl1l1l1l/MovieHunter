@@ -66,4 +66,11 @@ public class LikesController {
     public ResponseResult findAllLikes(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
         return new ResponseResult<>(200, "操作成功", likesService.findAllLikes(pageNum, pageSize));
     }
+
+    @PreAuthorize(value = "hasAuthority('sys:manager')")
+    @ApiOperation("根据评论或用户ID查询点赞")
+    @GetMapping("/findLikesById")
+    public ResponseResult findAllLikes(@RequestParam(required = false) String userId, @RequestParam(required = false) Long commentId, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", likesService.findLikesById(userId, commentId, pageNum, pageSize));
+    }
 }

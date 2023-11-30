@@ -80,4 +80,11 @@ public class CommentController {
         map.put("影响行数", res);
         return new ResponseResult<>(200, "操作成功", map);
     }
+
+    @PreAuthorize(value = "hasAuthority('sys:get')")
+    @ApiOperation("找到当前用户点赞的评论")
+    @GetMapping("/findVotedCommentsByCurUser")
+    public ResponseResult findVotedCommentsByCurUser( @RequestHeader String token, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "7") Integer pageSize) throws Exception {
+        return new ResponseResult<>(200, "操作成功", commentService.findVotedCommentsByCurUser(token, pageNum, pageSize));
+    }
 }

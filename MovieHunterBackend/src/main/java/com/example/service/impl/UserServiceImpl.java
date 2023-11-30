@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.entity.Likes;
+import com.example.mapper.LikesMapper;
 import com.example.mapper.UserInfoMapper;
 import com.example.mapper.UserMapper;
 import com.example.entity.User;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserInfoMapper userInfoMapper;
 
+    @Resource
+    private LikesMapper likesMapper;
 
     public IPage<User> showUsersByPages(int pageNum, int pageSize) {
         return userMapper.selectPage(new Page<>(pageNum, pageSize), null);
@@ -82,8 +86,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUserById(String id) {
-        return userMapper.deleteById(id);
+    public int deleteUserById(String userId) {
+        likesMapper.delete(new LambdaQueryWrapper<Likes>().eq(Likes::getUserId, userId));
+        return userMapper.deleteById(userId);
     }
 
     @Override

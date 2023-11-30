@@ -9,17 +9,19 @@ import java.util.List;
 public interface FavoriteService {
     List<Favorite> findAllFavoritesByUserId(String userId);
 
-    int updateFavouriteById(Favorite favorite);
+    int updateFavouriteById(Favorite favorite, String token) throws Exception;
 
-    int setFavouriteById(Favorite favorite);
+    int setFavouriteById(Favorite favorite, String token) throws Exception;
 
-    int insertFavorite(Favorite favorite);
+    int insertFavorite(Favorite favorite, String token) throws Exception;
 
     int insertMovieToFavorite(FavoriteMovie favoriteMovie) throws Exception;
 
     int deleteMovieInFavorite(FavoriteMovie favoriteMovie);
 
     List<Movie> findAllMoviesInFavorite(Long favoriteId);
+
+    List<Favorite> findFavoritesByCurUser(String token) throws Exception;
 
     int deleteFavoriteById(Long favoriteId);
 

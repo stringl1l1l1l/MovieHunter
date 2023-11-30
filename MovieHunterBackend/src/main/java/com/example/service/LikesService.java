@@ -18,4 +18,6 @@ public interface LikesService {
     int cancelVoteByCommentId(Long id, String token) throws Exception;
 
     IPage<Likes> findAllLikes(int pageNum, int pageSize);
+
+    IPage<Likes> findLikesById(String userId, Long commentId, Integer pageNum, Integer pageSize);
 }

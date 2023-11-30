@@ -2,10 +2,9 @@ package com.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.entity.*;
-import com.example.mapper.RoleMapper;
-import com.example.mapper.UserInfoMapper;
-import com.example.mapper.UserMapper;
-import com.example.mapper.UserRoleMapper;
+import com.example.mapper.*;
+import com.example.service.CommentService;
+import com.example.service.LikesService;
 import com.example.service.LoginService;
 import com.example.util.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -94,8 +93,8 @@ public class LoginServiceImpl implements LoginService {
             return new ResponseResult<>(500, "验证码发送失败");
         }
 
-        // 将验证码缓存到redis，过期时间1小时
-        redisCache.setCacheObject("code:" + email, code, 1, TimeUnit.MINUTES);
+        // 将验证码缓存到redis
+        redisCache.setCacheObject("code:" + email, code, SendEmailUtils.LIFETIME_MIN, TimeUnit.MINUTES);
         return new ResponseResult<>(200, "验证码发送成功，请注意查收");
     }
 
@@ -129,6 +128,7 @@ public class LoginServiceImpl implements LoginService {
             // 用户数据插入数据库
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User insertUser = new User(user);
+            insertUser.setUsername(user.getEmail());
             userMapper.insert(insertUser);
 
             // 生成JWT
@@ -148,6 +148,8 @@ public class LoginServiceImpl implements LoginService {
                             .getRoleId())
             );
             redisCache.deleteObject("code:" + user.getEmail());
+            userInfoMapper.insert(new UserInfo(null, user.getUserId(), null,"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif", user.getEmail()));
+
             return new ResponseResult<Map>(200, "注册成功", map);
         }
         return new ResponseResult<>(500, "用户已存在,请登录");
