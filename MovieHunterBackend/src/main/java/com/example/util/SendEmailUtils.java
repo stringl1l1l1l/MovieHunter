@@ -36,7 +36,7 @@ public class SendEmailUtils {
         mail.setSubject("MovieHunter验证码");
         /*设置邮件的内容*/
         Integer code = ValidateCodeUtils.generateNumValidateCode(4);
-        mail.setMsg("【MovieHunter】验证码: " + code + " ，" + LIFETIME_MIN + "分钟内有效");
+        mail.setMsg("【MovieHunter】验证码 " + code + "，" + LIFETIME_MIN + "分钟内有效");
         //发送
         mail.send();
 
