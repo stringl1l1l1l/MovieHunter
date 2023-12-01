@@ -7,29 +7,29 @@
 	             <div class="box">
 	                 <nav class="nav_link">
 	                     <img src="../../static/home.png" class="img_btn">
-	                     <router-link class="link_btn" active-class="active" to="../recommendations/recommendations">首页</router-link>
-	                 </nav>
+						 <text class="link_btn"  @click="handleClick('recommendations/recommendations')">首页</text>
+	                     </nav>
 	             </div>
 	             <div class="box">
 	                 <nav class="nav_link">
 	                     <img src="../../static/movieTag.png" class="img_btn">
-	                     <router-link class="link_btn" active-class="active" to="../favorite/favorite">收藏夹</router-link>
+						 <text class="link_btn"  @click="handleClick('favorite/favorite')">收藏夹</text>
 	                 </nav>
-					 
+	         			 
 	                 <nav class="nav_link">
 	                     <img src="../../static/user.png" class="img_btn">
-	                     <router-link class="link_btn" active-class="active" to="../UserInfo/UserInfo">个人主页</router-link>
+	                     <text class="link_btn" @click="handleClick('UserInfo/UserInfo')">个人主页</text>
 	                 </nav>
-					 
-					 <nav class="nav_link">
-					     <img src="../../static/exit.png" class="img_btn">
-					     <router-link class="link_btn" active-class="active" to="../Login/LoginByEmail">退出</router-link>
-					 </nav>
+	         			 
+	         			 <nav class="nav_link">
+	         			     <img src="../../static/exit.png" class="img_btn">
+	         			     <text class="link_btn" @click="handleClick('Login/LoginByEmail')">退出</text>
+	         			 </nav>
 	             </div>
 	         </div>
 	     </div>
 		 
-	 <view class="search-main">
+	<view class="search-main">
 		 <div class="search-view">
 			<u-col span="12">
 						 <u-input
@@ -40,11 +40,12 @@
 						   ></u-input>
 			</u-col>
 		</div>
-	 </view>
+	</view>
 	<view class="main">
 	 <u-row gutter="16" justify="between">
 		 <u-col span="1">
-			 <u-button @click="showTag" class="tagButton">按类型筛选</u-button>
+			 <u-button v-show="tagMask==0" @click="showTag" class="tagButton">按类型筛选</u-button>
+			 <u-button v-show="tagMask!=0" @click="showTag" class="tagButton" style="background-color:aliceblue">按类型筛选</u-button>
 			 <u-overlay :show="isTagShow" @click="closeOverlay">
 				 <view v-show="isTagShow" class="tag-contanier">
 					 <u-tag 
@@ -57,7 +58,8 @@
 			 </u-overlay>
 		 </u-col>
 		 <u-col span="1">
-			 <u-button @click="showRegion" class="tagButton">按地区筛选</u-button>
+			 <u-button v-show="regionMask==0" @click="showRegion" class="tagButton">按地区筛选</u-button>
+			 <u-button v-show="regionMask!=0" @click="showRegion" class="tagButton" style="background-color:aliceblue">按地区筛选</u-button>
 			 <u-overlay :show="isRegionShow" @click="closeOverlay">
 			  <view v-show="isRegionShow" class="tag-contanier">
 			 		 <u-tag 
@@ -69,39 +71,44 @@
 			  </view>
 			  </u-overlay>
 		 </u-col>
+		 <u-col span="1">
+		 		<u-button v-show="recommendMask==0" @click="setTag" class="tagButton">个性化推荐</u-button>
+				<u-button v-show="recommendMask!=0" @click="setTag" class="tagButton" style="background-color:aliceblue">个性化推荐</u-button>
+		 </u-col>
 	 </u-row>
 	</view>
 	
 	<view class="main">
 		  <div>
 		      <div v-if="isFavoriteShow" class="overlay">
-				<div class="sub-window">
+				<div class="sub-window-big">
 					<div @click="closeSubWindow" class="close-button">&times;</div>
-					<div @click="createButton" class="create-button">新建收藏夹</div>
-					
 					<div class="scrollable-list">
+					<div @click="createButton" class="create-button">新建收藏夹</div>
 						<u-list class="favourite-list">
 							 <u-list-item v-for="favorite in favorites" :key="favorite.favoriteId" >
 								<u-cell :title="favorite.name" @click="addMovieToFavorite(favorite.favoriteId)" class="cell-button"></u-cell>
 							 </u-list-item>
 						</u-list>
 					</div>
+				</div>
+			</div>
 		        <view v-if="isCreateShow" class="overlay">
-					<div class="sub-window">
+					<div class="sub-window-create">
 						<div @click="closeSubWindow_create" class="close-button">&times;</div>
 						<u-input  v-model="favoriteName" placeholder="请输入收藏夹名称"></u-input>
 						<u-button @click="createFavorite">点击创建</u-button>
 						<view v-if="isErrorShow" style="color: red;">{{errorMessage}}</view>
 					</div>
 		        </view>
-				</div>
-		      </div>
+				
+		      
 		    </div>
 	<view class="movie-list">
 		<view v-for="movie in dataList" :key="movie.id" class="movie-item">
 			<view class="movie-item-top">
 			<view class="movie-main"/>
-				<img class="movie-poster" :src="movie.cover"></img>
+				<img class="movie-poster" :src="movie.cover" alt="无海报" onerror="this.src='http://123.60.136.40:8081/MovieHunterWeb/static/movie.jpeg';this.οnerrοr=null"></img>
 			   <view class="movie-info">
 				 <view class="movie-title">{{ movie.name }}</view>
 				 <view class="movie-year">{{ movie.year }}</view>
@@ -113,13 +120,13 @@
 			   </view>
 			</view>
 		   <view class="movie-actions">
-			 <u-button @click="favoriteHandle(movie.movieId)" type="primary"  size="small">加入收藏夹</u-button>
-			 <u-button @click="showMore(movie.movieId)" type="info"  size="small">查看详情</u-button>
+			 <u-button @click="favoriteHandle({id: movie.movieId, mask: movie.genresMask})" type="primary"  size="small">加入收藏夹</u-button>
+			 <u-button @click="showMore({id: movie.movieId, mask: movie.genresMask})" type="info"  size="small">查看详情</u-button>
 		   </view>
 		 </view>
 		 <view v-if="!isLoad" class="loading-text">加载中...</view>
 		 <view v-if="isLoad && dataList.length === 0" class="no-data-text">暂无数据</view>
-  
+		 <u-button v-show="isLoad && loadMore" @click="loadData()" class="tagButton">加载更多</u-button>
 	   </view>
 	</view>
 	
@@ -131,8 +138,8 @@
 export default {
   data() {
     return {
-		page:1,
-		pageSize:7,
+		page:0,
+		pageSize:10,
 		token:'',
 		isTagShow:false,
 		isRegionShow:false,
@@ -149,6 +156,9 @@ export default {
 		isCreateShow:false,
 		isErrorShow:false,
 		errorMessage:"",
+		clickHistory:[],
+		recommendMask:0,
+		loadMore:true,
 		tags:
   [
     { id: 0, text: '舞台艺术', type: 'info', mask: 1 },
@@ -218,10 +228,14 @@ export default {
   },
   
   onReachBottom(){
-     // 触底时加载更多数据
-        this.page++;
-  		console.log(this.page)
-        this.loadData();
+	 // 触底时加载更多数据
+	    if(this.loadMore)
+	 		{
+	 			 // this.page++;
+	 			 console.log(this.page);
+	 			 this.loadData();
+	 		}
+        
   },
 onLoad() {
 	  var that = this
@@ -261,7 +275,7 @@ onLoad() {
 	  			icon:'error'
 	  		})
 	  	}
-	  })
+	})
 	  
 	 
     console.log(that.token);
@@ -271,6 +285,61 @@ onLoad() {
 },
 	
   methods:{
+	  handleClick(e){
+	  	uni.redirectTo({
+	  		url:'/pages/'+e
+	  	})
+	  },
+	  isMaskNull(e) {
+		  return e===0
+	  },
+	  updateHistory(e) {
+			var id = e['id']
+			var t = new Date().toLocaleTimeString();
+		  
+			// 查找是否存在相同ID的记录
+			var existingItemIndex = this.clickHistory.findIndex(function(item) {
+			  return item.id === id;
+			});
+			// 如果找到相同ID的记录，只更新时间
+			if (existingItemIndex !== -1) {
+			  this.clickHistory[existingItemIndex].t = t;
+			}
+			// 如果不重复且不满三个，直接添加新记录
+			else if (this.clickHistory.length < 3) {
+			  this.clickHistory.push({ id: id, t: t, mask: e['mask']});
+			}
+			// 如果不重复且满三个，替换时间最早的记录
+			else {
+				var earliestItemIndex = 0;
+				var earliestTime = this.clickHistory[0].t;
+	  
+				for (var i = 1; i < this.clickHistory.length; i++) {
+					if (this.clickHistory[i].t < earliestTime) {
+					earliestItemIndex = i;
+					earliestTime = this.clickHistory[i].t;
+					}
+				}
+				this.clickHistory[earliestItemIndex] = { id: id, t: t, mask: e['mask']};
+			}
+	  },
+	  setTag() {
+		this.movieName=''
+		this.recommendMask = 0
+		this.regionMask = 0
+		this.tagMask = 0
+		for (var i = 0; i < this.tags.length; i++) {
+			this.tags[i].type='info'
+		}
+		for (var i = 0; i < this.regions.length; i++) {
+			this.regions[i].type='info'
+		}
+		for (var i = 0; i < this.clickHistory.length; i++) {
+			this.recommendMask = this.recommendMask | this.clickHistory[i]['mask']
+		}
+		
+		this.updateData()
+	  },
 	  showSubWindow() {
 		this.isFavoriteShow = true;
 		// 禁用背后的其他控件
@@ -283,10 +352,12 @@ onLoad() {
 	  },
 	  createButton()
 	  {
+		  this.isFavoriteShow = false;
 	  		this.isCreateShow = true
 			this.isErrorShow=false
 	  },
 	  closeSubWindow_create(){
+		  this.isFavoriteShow = true;
 		  this.isCreateShow = false
 		  this.isErrorShow=false
 	  },
@@ -295,28 +366,8 @@ onLoad() {
 	  },
 	  findMovieChange()
 	  {
-	  		  var that = this
-	  		  if(this.movieName=='')
-	  		  {
-	  			  return
-	  		  }else{
-	  			  uni.request({
-	  			  	url:this.$BASE_URL.BASE_URL+'movie/findMoviesByName/'+that.movieName+'?pageNum='+that.page+'&pageSize='+that.pageSize,
-	  			  			method:"GET",
-	  			  			header:{token:that.token},
-	  			  			success(res) {
-	  			  				if(res.data.code==200)
-	  			  				{
-	  			  					that.dataList = res.data.data.records
-	  			  				}
-	  			  			},
-	  			  			complete(res) {
-	  			  				console.log(res)
-	  			  			}
-	  			  			
-	  			  			
-	  			  })
-	  		  }  
+			 console.log(this.movieName)
+			 this.updateData()
 	  },
 	  closeOverlay()
 	  {
@@ -333,13 +384,14 @@ onLoad() {
 		  }else{
 			  this.tags[index].type="info"
 		  }
-		  
+		  this.recommendMask = 0
 		  this.computeMask('tag');
 		  this.updateData('tag');
 		
 	  },
 	  selectRegion(index)
 	  {
+		  this.recommendMask = 0
 		  if(this.regions[index].type=="info")
 		  {
 		  			  this.regions[index].type="primary"
@@ -354,13 +406,22 @@ onLoad() {
 		  var that=this;
 		  // var url;
 		  that.page = 0;
-		  this.dataList=[]
+		  that.dataList=[]
 		  if(e=='tag'){
 			  that.regionMask = 0
 			  for (var i = 0; i < this.regions.length; i++) {
 			  	this.regions[i].type='info'
 			  }
+		  }else if(e=='region'){
+			  that.tagMask = 0
+			  for (var i = 0; i < this.tags.length; i++) {
+			  	this.tags[i].type='info'
+			  }
 		  }else{
+			  that.regionMask = 0
+			  for (var i = 0; i < this.regions.length; i++) {
+			  	this.regions[i].type='info'
+			  }
 			  that.tagMask = 0
 			  for (var i = 0; i < this.tags.length; i++) {
 			  	this.tags[i].type='info'
@@ -429,8 +490,7 @@ onLoad() {
 					
 		  })
 		this.showSubWindow()
-	  },
-		  
+	  }, 
 	  showError(e) {
 		  this.isErrorShow = true
 		  this.errorMessage = e
@@ -438,6 +498,9 @@ onLoad() {
 	  createFavorite(e)
 	  {
 	  	var that = this
+		if (that.favoriteName=="") {
+			that.favoriteName = "默认"
+		}
 	  	uni.request({
 	  		url:this.$BASE_URL.BASE_URL + 'favorite/insertFavorite',
 	  		method:'PUT',
@@ -466,12 +529,12 @@ onLoad() {
 	  	
 	  	
 	  },
-	  
 	    favoriteHandle(e)
 	    {
+			this.updateHistory(e)
 	  	  var that = this
 	  	 uni.request({
-	  	 	url:this.$BASE_URL.BASE_URL+'favorite/insertFavorite/'+that.userId,
+	  	 	url: this.$BASE_URL.BASE_URL + 'favorite/findFavoritesByCurUser/',
 	  	 		method:'GET',
 	  	 		header:{
 	  	 			token:that.token
@@ -480,15 +543,15 @@ onLoad() {
 	  	 				console.log(res)
 	  	 				if(res.data.data.length==0)
 	  	 				{
-	  	 					that.createFavorite(e)
+	  	 					// that.createFavorite(e['id'])
+							that.showSubWindow()
+							that.selectMovieId = e['id']
 	  	 				}
 	  					else{
 	  						that.favorites = res.data.data
 	  						that.showSubWindow()
-	  						that.selectMovieId = e
-	  						
+	  						that.selectMovieId = e['id']
 	  					}
-	  	 				
 	  	 			},
 	  	 			fail(res) {
 	  	 				console.log(res)
@@ -497,7 +560,6 @@ onLoad() {
 	  	 					icon:'fail'
 	  	 				})
 	  	 			}
-	  	 			
 	  	 })
 	    },
 	    
@@ -528,7 +590,6 @@ onLoad() {
 	  					icon:"error"
 	  				})
 	  			}
-	  			
 	  		},
 	  		fail(res) {
 				console.log(res)
@@ -540,9 +601,10 @@ onLoad() {
 	  	  })
 	    },
 	  showMore(e)
-	  {		uni.navigateTo({
-			url:'/pages/MovieInfo/MovieInfo?movieId='+e
-			
+	  {		
+		this.updateHistory(e)
+		uni.navigateTo({
+		url:'/pages/MovieInfo/MovieInfo?movieId='+e['id']
 	  }),
 		   console.log(e)
 	  },
@@ -552,33 +614,49 @@ onLoad() {
 		  	this.tags[i].type='info'
 		  }
 		  this.closeOverlay()
-		  this.dataList=[]
 		  this.tagMask = 0
-		  this.page=0
-		  this.loadData()
+		  this.recommendMask = 0
+		  this.updateData()
 	  },
 	  clearRegionMask()
 	  {
-	  		  for (var i = 0; i < this.regions.length; i++) {
-	  		  	this.regions[i].type='info'
-	  		  }
-	  		  this.closeOverlay()
-	  		  this.dataList=[]
-			  this.regionMask = 0
-			  this.page=0
-	  		  this.loadData()
+		  for (var i = 0; i < this.regions.length; i++) {
+			this.regions[i].type='info'
+		  }
+		  this.closeOverlay()
+		  this.regionMask = 0
+		  this.recommendMask = 0
+		  this.updateData()
 	  },
 	   loadData() {
+		   if(this.page==0){
+			   this.loadMore=true
+			   this.dataList=[]
+		   }
+		   this.page++
+		   if(!this.loadMore){
+			   uni.showToast({
+			   	title:"已经到底!",
+			   })
+			   return
+		   }
+		   uni.showLoading({
+		   	title:'加载中'
+		   })
 		   var that=this
 		   var myurl
-		   if(that.tagMask!=0){
-				  myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByGenresMask/'+that.tagMask+'?pageNum='+that.page+'&pageSize='+that.pageSize
+		   if(that.movieName!=''){
+		   		myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByName?name='+that.movieName+'&pageNum='+that.page+'&pageSize='+that.pageSize
+		   }else if(that.recommendMask!=0){
+			    myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByGenresMask/'+that.recommendMask+'?pageNum='+that.page+'&pageSize='+that.pageSize
+		   }else if(that.tagMask!=0){
+				myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByGenresMask/'+that.tagMask+'?pageNum='+that.page+'&pageSize='+that.pageSize
 		   }else if(that.regionMask != 0){
-				  myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByRegionsMask/'+that.regionMask+'?pageNum='+that.page+'&pageSize='+that.pageSize
-			  }
-			  else{
-				  myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByPages/'+that.page+'?pageSize=7'
-			  }
+				myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByRegionsMask/'+that.regionMask+'?pageNum='+that.page+'&pageSize='+that.pageSize
+		  }
+		  else{
+			  myurl = this.$BASE_URL.BASE_URL+'movie/findMoviesByPages/'+that.page+'?pageSize='+that.pageSize
+		  }
 	        uni.request({
 	        		url:myurl,
 	        		method:'GET',
@@ -589,11 +667,38 @@ onLoad() {
 	        		success(res) {
 	        			if(res.data.code==200)
 	        			{
+							uni.hideLoading()
 							that.isLoad=true;
-	        				console.log(res)
+	        				console.log(that.page)
 	        				console.log("请求成功")
-							console.log(res)
-	        				that.dataList =  that.dataList.concat(res.data.data.records);
+							console.log(res.data.data.pages)
+							console.log(that.dataList)
+	        				
+							if(res.data.data.pages < that.page )
+							{
+								that.loadMore = false
+								if(that.page!=1){
+									uni.showToast({
+										title:"已经到底",
+										icon:'error'
+									})
+								}
+							}else if(that.loadMore){
+								that.loadMore = res.data.data.pages > that.page
+								if(that.page==1){
+									that.dataList =  res.data.data.records;
+								}else{
+									that.dataList =  that.dataList.concat(res.data.data.records);
+								}
+								if(!that.loadMore){
+									if(that.page!=1){
+										uni.showToast({
+											title:"已经到底",
+											icon:'error'
+										})
+									}
+								}
+							}
 	        			}
 	        			else if(res.data.code==401){
 							console.log(res)
@@ -617,7 +722,7 @@ onLoad() {
 <style>
 .scrollable-list {
   overflow-y: auto;
-  height: 280px;
+  height: 90%;
 }	
 .scrollable-list {
 	margin-top: 40px;
@@ -669,10 +774,18 @@ onLoad() {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.sub-window {
+.sub-window-big {
+  position: relative;
+ width: 400px;
+  height: 500px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+.sub-window-create {
   position: relative;
  width: 300px;
-  height: 315px;
+  height: 100px;
   background-color: #fff;
   border: 1px solid #ccc;
   padding: 16px;

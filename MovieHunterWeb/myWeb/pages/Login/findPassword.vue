@@ -33,8 +33,8 @@
 				</u-col>	
 			</u-row>
 			
-			<button type="primary" @click="register" class="login-button">更新并登录</button>
-			
+			<button type="primary" @click="register" class="login-button">更新密码</button>
+
 		  </u-form>
 		</view>
   </view>
@@ -66,18 +66,18 @@
 		      { required: true, message: '请再次输入密码', trigger: 'blur' },
 		     {
 		     							trigger: 'blur',
-		     							// validator: (rule, value, callback) => {
-		     							// 	if (value !== this.form.userInfo.password) {
-		     							// 		callback(new Error('两次输入密码不一致'))
-		     							// 	} else {
-		     							// 		callback()
-		     							// 	}
-		     							// }
+		     							validator: (rule, value, callback) => {
+		     								if (value !== this.form.userInfo.password) {
+		     									callback(new Error('两次输入密码不一致'))
+		     								} else {
+		     									callback()
+		     								}
+		     							}
 		     						}
 		    ],
-			email:[
-				{required:true,message:'请输入邮箱',trigger:'blur' ,type:"email"}
-			],
+			// email:[
+			// 	{required:true,message:'请输入邮箱',trigger:'blur' ,type:"email"}
+			// ],
 		  }
         
       }
@@ -128,60 +128,62 @@
 			
 			},
       register() {
-		  uni.request({
-		  	url:this.$BASE_URL.BASE_URL+'resetPwdWithCode',
-		  							method:'POST',
-		  							dataType:'json',
-		  							data:{
-		  								email:this.form.userInfo.email,
-		  								password:this.form.userInfo.password,
-		  								code:this.form.code
-		  							},
-		  							success(res){
-		  								console.log(res)
-		  								if(res.data.code==200)
-		  								{
-		  									uni.setStorage({
-		  										key:'token',
-		  										data:res.data.data.token,
-		  										success(data) {
-		  											console.log('设置token成功');
-		  											uni.showToast({
-		  												title: '登录成功'
-		  											});
-		  											console.log('即将跳转');
-		  										},
-		  										fail() {
-		  											uni.showToast({
-		  												title: '设置token失败',
-		  												icon: 'error'
-		  											});
-		  										}
-		  									})
-		  									uni.switchTab({
-		  										url:'/pages/recommendations/recommendations'
-		  									})
+		  	uni.request({
+		  		url:this.$BASE_URL.BASE_URL+'resetPwdWithCode',
+		  								method:'POST',
+		  								dataType:'json',
+		  								data:{
+		  									email:this.form.userInfo.email,
+		  									password:this.form.userInfo.password,
+		  									code:this.form.code
+		  								},
+		  								success(res){
+		  									console.log(res)
+		  									if(res.data.code==200)
+		  									{
+		  										uni.showToast({
+		  											title: '修改成功'
+		  										});
+												uni.setStorage({
+													key:'token',
+													data:res.data.data.token,
+													success(data) {
+														console.log('设置token成功');
+														uni.showToast({
+															title: '登录成功'
+														});
+														console.log('即将跳转');
+													},
+													fail() {
+														uni.showToast({
+															title: '设置token失败',
+															icon: 'error'
+														});
+													}
+												})
+		  										uni.redirectTo({
+		  											 url:'/pages/Login/LoginByEmail'
+		  										})
+		  									}
+		  									else{
+		  										uni.showToast({
+		  											title:res.data.message,
+		  											icon: 'error'
+		  										})
+		  									}
+		  								},
+		  								complete(res) {
+		  									console.log(res)
+		  								},
+		  								fail(err) {
+		  									console.log(err)
 		  								}
-		  								else{
-		  									uni.showToast({
-		  										title:"验证码错误",
-		  										icon: 'error'
-		  										
-		  									})
-		  								}
-		  							},
-		  							complete(res) {
-		  								console.log(res)
-		  							},
-		  							fail(err) {
-		  								console.log(err)
-		  							}
+		  								
+		  								
+		  	})						
 		  							
-		  							
-		  })
+		  },
       
-		
-      },
 	 handle(e){
 	 	this.code= e.toString()
 	 	console.log("输入结束，当前值为："+e)

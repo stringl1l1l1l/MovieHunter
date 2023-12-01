@@ -66,18 +66,18 @@
 		      { required: true, message: '请再次输入密码', trigger: 'blur' },
 		     {
 		     							trigger: 'blur',
-		     							// validator: (rule, value, callback) => {
-		     							// 	if (value !== this.form.userInfo.password) {
-		     							// 		callback(new Error('两次输入密码不一致'))
-		     							// 	} else {
-		     							// 		callback()
-		     							// 	}
-		     							// }
+		     							validator: (rule, value, callback) => {
+		     								if (value !== this.form.userInfo.password) {
+		     									callback(new Error('两次输入密码不一致'))
+		     								} else {
+		     									callback()
+		     								}
+		     							}
 		     						}
 		    ],
-			email:[
-				{required:true,message:'请输入邮箱',trigger:'blur' ,type:"email"}
-			],
+			// email:[
+			// 	{required:true,message:'请输入邮箱',trigger:'blur' ,type:"email"}
+			// ],
 		  }
         
       }
@@ -161,15 +161,15 @@
 							});
 						}
 					})
-					uni.switchTab({
+					uni.redirectTo({
 						url:'/pages/recommendations/recommendations'
 					})
+					
 				}
 				else{
 					uni.showToast({
-						title:"验证码错误",
-						icon: 'error'
-						
+						title:res.data.message,
+						icon: 'error',
 					})
 				}
 			},
