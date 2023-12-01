@@ -44,12 +44,18 @@ export const constantRoutes = [
         component: () => import('@/views/table/movieList'),
         meta: { title: '电影管理', icon: 'table' }
       },
-      // {
-      //   path: 'orderList',
-      //   name: 'orderList',
-      //   component: () => import('@/views/table/orderList'),
-      //   meta: { title: '订单管理', icon: 'table' }
-      // },
+      {
+        path: 'commentList',
+        name: 'commentList',
+        component: () => import('@/views/table/commentList'),
+        meta: { title: '评论管理', icon: 'table' }
+      },
+      {
+        path: 'likeList',
+        name: 'likeList',
+        component: () => import('@/views/table/likeList'),
+        meta: { title: '点赞管理', icon: 'table' }
+      },
     ]
   },
   {

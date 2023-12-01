@@ -10,7 +10,8 @@
                 </el-col>
 
                 <el-col :span="6" style="float:right">
-                    <el-input clearable placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="keyword" @input="fetchData(1)" />
+                    <el-input clearable placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="keyword"
+                        @input="fetchData(1)" />
                 </el-col>
             </el-row>
         </div>
@@ -22,41 +23,41 @@
                     {{ scope.$index }}
                 </template>
             </el-table-column>
-            <el-table-column label="电影ID" align="center">
+            <el-table-column label="电影ID" min-width="80" align="center">
                 <template slot-scope="scope">
                     {{ scope.row.movieId }}
                 </template>
             </el-table-column>
-            <el-table-column label="电影名称" align="center">
+            <el-table-column label="电影名称" min-width="100" align="center">
                 <template slot-scope="scope">
                     <span>{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="电影别名" align="center">
+            <el-table-column label="电影别名" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     {{ scope.row.alias }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="海报" min-width="100" align="center">
+            <el-table-column label="海报" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     {{ scope.row.cover }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="简介" min-width="200" align="center">
+            <el-table-column label="简介" show-overflow-tooltip min-width="300" align="center">
                 <template slot-scope="scope">
                     {{ scope.row.storyline }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="演员" align="center">
+            <el-table-column label="演员" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     {{ scope.row.actors }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="导演" align="center">
+            <el-table-column label="导演" min-width="100" align="center">
                 <template slot-scope="scope">
                     {{ scope.row.directors }}
                 </template>
@@ -80,13 +81,13 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="上映日期" min-width="100" align="center">
+            <el-table-column label="上映日期" min-width="130" align="center">
                 <template slot-scope="scope">
                     {{ scope.row.releaseDate }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="标签" align="center">
+            <el-table-column label="标签" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     {{ scope.row.tags }}
                 </template>
@@ -109,53 +110,53 @@
                 style="width: 400px; margin-left:50px;">
 
                 <el-form-item label="电影名称" prop="name">
-                    <el-input v-model="temp.name" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.name" clearable placeholder="请输入" style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="电影别名" prop="alias">
-                    <el-input v-model="temp.alias" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.alias" clearable placeholder="请输入" style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="电影评分" prop="score">
                     <el-rate v-model="temp.score" :max="10" allow-half show-score text-color="#ff9900" />
                 </el-form-item>
                 <el-form-item label="海报URL" prop="cover">
-                    <el-input v-model="temp.cover" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.cover" placeholder="请输入" clearable style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="演员" prop="actors">
-                    <el-input v-model="temp.actors" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.actors" placeholder="请输入" clearable style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="导演" prop="directors">
-                    <el-input v-model="temp.directors" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.directors" placeholder="请输入" clearable style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="标签" prop="tags">
-                    <el-input v-model="temp.tags" placeholder="请输入" style="width:600px;" />
+                    <el-input v-model="temp.tags" placeholder="请输入" clearable style="width:600px;" />
                 </el-form-item>
 
                 <el-form-item label="简介" prop="storyline">
-                    <el-input v-model="temp.storyline" :autosize="{ minRows: 2, maxRows: 10 }" type="textarea"
+                    <el-input v-model="temp.storyline" :autosize="{ minRows: 2, maxRows: 10 }" clearable type="textarea"
                         placeholder="请输入" style="width:500px;" />
                 </el-form-item>
 
                 <el-form-item label="类别" prop="genres">
-                    <el-select v-model="temp.genres_arr" multiple placeholder="请选择" style=" width:500px;">
+                    <el-select v-model="temp.genres_arr" multiple placeholder="请选择" clearable style="width:500px;">
                         <el-option v-for="item in this.genres" :key="item.id" :label="item.text" :value="item.mask">
                         </el-option>
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="地区" prop="regions">
-                    <el-select v-model="temp.regions_arr" multiple placeholder="请选择" style=" width:500px;">
+                    <el-select v-model="temp.regions_arr" multiple placeholder="请选择" clearable style=" width:500px;">
                         <el-option v-for="item in this.regions" :key="item.id" :label="item.text" :value="item.mask">
                         </el-option>
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="上映日期" prop="regions">
-                    <el-date-picker v-model="temp.releaseDate" align="right" type="date" placeholder="选择日期"
+                    <el-date-picker v-model="temp.releaseDate" align="right" type="date" clearable placeholder="选择日期"
                         format="yyyy年MM月dd日" value-format="yyyy年MM月dd日" />
                 </el-form-item>
 
@@ -407,10 +408,14 @@ export default {
         createData() {
             this.$refs['dataForm'].validate((valid) => {
 
-                this.temp.genresMask = this.transArrtoMask(this.temp.genres_arr)
-                this.temp.regionsMask = this.transArrtoMask(this.temp.regions_arr)
-                this.temp.genres = this.transGenresMasktoStr(this.temp.genresMask)
-                this.temp.regions = this.transRegionsMasktoStr(this.temp.regionsMask)
+                if (this.temp.genres_arr != null && this.temp.genres_arr != []) {
+                    this.temp.genresMask = this.transArrtoMask(this.temp.genres_arr)
+                    this.temp.genres = this.transGenresMasktoStr(this.temp.genresMask)
+                }
+                if (this.temp.regions_arr != null && this.temp.regions_arr != []) {
+                    this.temp.regionsMask = this.transArrtoMask(this.temp.regions_arr)
+                    this.temp.regions = this.transRegionsMasktoStr(this.temp.regionsMask)
+                }
 
                 if (valid) {
                     insertMovie(this.temp).then((response) => {
@@ -433,10 +438,14 @@ export default {
                 if (valid) {
                     const index = this.list.findIndex(v => v.movieId === this.temp.movieId)
 
-                    this.temp.genresMask = this.transArrtoMask(this.temp.genres_arr)
-                    this.temp.regionsMask = this.transArrtoMask(this.temp.regions_arr)
-                    this.temp.genres = this.transGenresMasktoStr(this.temp.genresMask)
-                    this.temp.regions = this.transRegionsMasktoStr(this.temp.regionsMask)
+                    if (this.temp.genres_arr != null && this.temp.genres_arr != []) {
+                        this.temp.genresMask = this.transArrtoMask(this.temp.genres_arr)
+                        this.temp.genres = this.transGenresMasktoStr(this.temp.genresMask)
+                    }
+                    if (this.temp.regions_arr != null && this.temp.regions_arr != []) {
+                        this.temp.regionsMask = this.transArrtoMask(this.temp.regions_arr)
+                        this.temp.regions = this.transRegionsMasktoStr(this.temp.regionsMask)
+                    }
 
                     this.list.splice(index, 1, this.temp)
                     console.log(this.temp)

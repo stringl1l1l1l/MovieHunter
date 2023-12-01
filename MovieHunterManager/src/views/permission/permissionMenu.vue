@@ -9,9 +9,9 @@
           </el-button>
         </el-col>
 
-        <el-col :span="6" style="float:right">
+        <!-- <el-col :span="6" style="float:right">
           <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="this.search"/>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
 
@@ -142,7 +142,7 @@ export default {
         create: '创建'
       },
       search: "",
-      
+
     }
   },
   created() {

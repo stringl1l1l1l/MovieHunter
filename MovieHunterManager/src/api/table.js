@@ -30,6 +30,10 @@ export async function updateUserById(user) {
   return http.put("/user/updateUserById", user)
 }
 
+export async function setUserById(user) {
+  return http.put("/user/setUserById", user)
+}
+
 export async function findUserByEmail(email) {
   return http.getRestApi("/user/findUserByEmail", email)
 }
@@ -57,4 +61,26 @@ export async function insertMovie(movie) {
 
 export async function findMoviesByName(name, pageNum) {
   return http.get("/movie/findMoviesByName", { name: name, pageNum: pageNum })
+}
+
+// comment
+export async function deleteAnyCommentById(commentId) {
+  return http.delete("/comment/deleteAnyCommentById", commentId)
+}
+
+export async function findAllComments(pageNum) {
+  return http.get("/comment/findAllComments", { pageNum: pageNum })
+}
+
+export async function findCommentById(commentId) {
+  return http.getRestApi("/comment/findCommentById", commentId)
+}
+
+// likes
+export async function findAllLikes(pageNum) {
+  return http.get("/likes/findAllLikes", { pageNum: pageNum })
+}
+
+export async function findLikesById(obj) {
+  return http.get("/likes/findLikesById", obj)
 }

@@ -10,7 +10,8 @@
         </el-col>
 
         <el-col :span="6" style="float:right">
-          <el-input clearable placeholder="请输入用户邮箱" prefix-icon="el-icon-search" v-model="keyword" @change="fetchData(1)" />
+          <el-input clearable placeholder="请输入用户邮箱或ID" prefix-icon="el-icon-search" v-model="keyword"
+            @change="fetchData(1)" />
         </el-col>
       </el-row>
     </div>
@@ -26,12 +27,6 @@
       <el-table-column label="用户ID" width="150px" align="center">
         <template slot-scope="scope">
           {{ scope.row.userId }}
-        </template>
-      </el-table-column>
-
-      <el-table-column label="手机号" min-width="120px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.phoneNum }}</span>
         </template>
       </el-table-column>
 
@@ -72,16 +67,20 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
         style="width: 400px; margin-left:50px;">
 
-        <el-form-item label="手机号" prop="phoneNum">
-          <el-input v-model="temp.phoneNum" placeholder="请输入,编辑时不输入即不做修改" style="width:350px;" />
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="temp.email" placeholder="请输入" clearable style="width:600px;" />
         </el-form-item>
 
         <el-form-item label="用户名" prop="phoneNum">
-          <el-input v-model="temp.username" placeholder="请输入,编辑时不输入即不做修改" maxlength="30" style="width:350px;" />
+          <el-input v-model="temp.username" placeholder="请输入" clearable maxlength="30" style="width:600px;" />
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="请输入未加密密码,编辑时不输入即不做修改" show-password style="width:350px;" />
+          <el-input v-model="temp.password" placeholder="请输入密码" clearable show-password style="width:600px;" />
+        </el-form-item>
+
+        <el-form-item label="头像URL" prop="avatar">
+          <el-input v-model="temp.avatar" placeholder="请输入" clearable style="width:600px;" />
         </el-form-item>
 
       </el-form>
@@ -125,7 +124,7 @@ import {
   deleteUserById,
   restoreUserById,
   updateUserById,
-  insertUser, showUsersByPages, findUserByEmail
+  insertUser, showUsersByPages, findUserByEmail, setUserById
 } from '@/api/table'
 import { UTC2GMT } from "@/utils"
 import { deleteUserRole, findAllRoles, findAllRolesOfOneUser, insertUserRole } from "@/api/permission";
@@ -159,7 +158,6 @@ export default {
           email: null,
           password: null,
           username: null,
-          phoneNum: null,
           avatar: null
         }
       ],
@@ -181,7 +179,6 @@ export default {
         email: null,
         password: null,
         username: null,
-        phoneNum: null,
         avatar: null
       },
       textMap: {
@@ -250,7 +247,6 @@ export default {
     },
     handleUpdate(index, row) {
       this.temp = Object.assign({}, this.list[index])
-      this.temp.password = null
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -260,7 +256,8 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateUserById(this.temp).then((response) => {
+          
+          setUserById(this.temp).then((response) => {
             if (response.data["影响行数"] !== 0) {
               this.dialogFormVisible = false
               this.$message({
@@ -270,7 +267,7 @@ export default {
             } else {
               this.$message.error('更新失败');
             }
-            this.$nextTick(this.fetchData())
+            this.$nextTick(this.fetchData(this.curPage))
           })
         }
       })
@@ -294,7 +291,7 @@ export default {
             else {
               this.$message.error('添加失败');
             }
-            this.$nextTick(this.fetchData())
+            this.$nextTick(this.fetchData(this.page))
           })
         }
       })
