@@ -49,7 +49,7 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("增量更新收藏夹， null值不会更新")
     @PostMapping("/updateFavouriteById")
-    public ResponseResult updateFavouriteById(@RequestBody @Valid Favorite favorite, String token) throws Exception {
+    public ResponseResult updateFavouriteById(@RequestBody @Valid Favorite favorite, @RequestHeader String token) throws Exception {
         int res = favoriteService.updateFavouriteById(favorite,token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
@@ -59,7 +59,7 @@ public class FavoriteController {
     @PreAuthorize(value = "hasAuthority('sys:post')")
     @ApiOperation("全量更新收藏夹， null值会更新")
     @PostMapping("/setFavouriteById")
-    public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite, String token) throws Exception {
+    public ResponseResult setFavouriteById(@RequestBody @Valid Favorite favorite, @RequestHeader String token) throws Exception {
         int res = favoriteService.setFavouriteById(favorite,token);
         Map<String, Integer> map = new HashMap<>();
         map.put("影响行数", res);
