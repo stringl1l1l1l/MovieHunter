@@ -34,8 +34,8 @@
 		
 			 <!-- <u-button @click="login">没有账号？点我注册</u-button> -->
 			<view class="tips">
-				<router-link to="../Login/login" style="color: #3f9beb">没有账号？点我注册</router-link>
-				<router-link to="../Login/login" style="color: #3f9beb">找回密码（TODO）</router-link>
+				<router-link to="/pages/Login/login" style="color: #3f9beb">没有账号？点我注册</router-link>
+				<router-link to="/pages/Login/findPassword" style="color: #3f9beb">找回密码</router-link>
 			</view>
 				
 			</view>
@@ -73,8 +73,8 @@
 				<button @click="loginByCode" type="primary" class="login-button">登录</button>
 				
 				<view class="tips">
-					<router-link to="../Login/login" style="color: #3f9beb">没有账号？点我注册</router-link>
-					<router-link to="../Login/findPassword" style="color: #3f9beb">找回密码</router-link>
+					<router-link to="/pages/Login/login" style="color: #3f9beb">没有账号？点我注册</router-link>
+					<router-link to="/pages/Login/findPassword" style="color: #3f9beb">找回密码</router-link>
 				</view>
 			</view>	
 				
@@ -204,9 +204,8 @@
 						}
 						else{
 							uni.showToast({
-								title:"邮箱或密码错误",
+								title:res.data.message,
 								icon: 'error'
-								
 							})
 						}
 						
@@ -231,13 +230,41 @@
 					dataType:'json',
 				 	data:{
 				 		"email":this.form.email,	
-				 		"password":this.code
+				 		"code":this.form.code
 				 	},
 				 	success(res) {
-				 		console.log(res)
-						uni.redirectTo({
-							url:'/pages/recommendations/recommendations'
-						})
+						console.log(res)
+				 		if(res.data.code==200)
+				 		{
+				 			uni.setStorage({
+				 				key:'token',
+				 				data:res.data.data.token,
+				 				success(data) {
+				 					console.log('设置token成功');
+				 					uni.showToast({
+				 						title: '登录成功'
+				 					});
+				 					console.log('即将跳转');
+				 				},
+				 				fail() {
+				 					uni.showToast({
+				 						title: '设置token失败',
+				 						icon: 'error'
+				 					});
+				 				}
+				 			})
+				 			uni.redirectTo({
+				 				url:'/pages/recommendations/recommendations'
+				 			})
+				 		}
+				 		else{
+				 			uni.showToast({
+				 				title:res.data.message,
+				 				icon: 'error'
+				 			})
+				 		}
+						
+						
 				 	},
 				 	fail(res) {
 				 		console.log(res)

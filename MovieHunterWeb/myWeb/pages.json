@@ -24,6 +24,16 @@
 		},
 		
 		{
+			"path" : "pages/Login/findPassword",
+			"style" : 
+			{
+				"navigationBarTitleText" : "找回/修改密码",
+				"enablePullDownRefresh" :  false,
+				"navigationBarBackgroundColor": "#edf4ed"  // douban
+			}
+		},
+		
+		{
 			"path" : "pages/UserInfo/UserInfo",
 			"style" : 
 			{
@@ -52,6 +62,22 @@
 		},
 		{
 			"path" : "pages/favorite/favorite",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/UserInfo/comment",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/UserInfo/like",
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
