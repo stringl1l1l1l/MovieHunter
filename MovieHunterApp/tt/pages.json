@@ -1,0 +1,127 @@
+{
+	"easycom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	{
+		"path" : "pages/LoginByEmaiL/LoginByEmaiL",
+		"style" : 
+		{
+			"navigationBarTitleText" : "登录",
+			"enablePullDownRefresh" : false
+		}
+	},
+	
+		{
+			"path" : "pages/recommendations/recommendations",
+			"style" : 
+			{
+				"navigationBarTitleText" : "找电影",
+				"enablePullDownRefresh" :  false
+			}
+		},
+		
+		{
+			"path" : "pages/UserInfo/UserInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人主页",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/MovieInfo/MovieInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/Login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "注册",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/comments/comments",
+			"style" : 
+			{
+				"navigationBarTitleText" : "评论",
+				"enablePullDownRefresh" : true
+			}
+		},
+		{
+			"path" : "pages/favorite/favorite",
+			"style" : 
+			{
+				"navigationBarTitleText" : "收藏夹",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/findPassword/findPassword",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改密码",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/comments/myComments",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的评论",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/comments/myLikes",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的点赞",
+				"enablePullDownRefresh" : false
+			}
+		}
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"borderStyle":"black",//边框颜色
+				"backgroundColor":"#F7F7F7",//背景颜色
+				"color":"#000000",//默认颜色
+				"selectedColor":"#07C160",//选中的颜色
+				"list": [
+					{
+						"iconPath": "static/movieTag.png",
+						"selectedIconPath": "static/movieTag1.png",
+						"text": "找电影",
+						"pagePath": "pages/recommendations/recommendations"
+					},
+					{
+						"iconPath": "static/user.png",
+						"selectedIconPath": "static/user1.png",
+						"text": "我的",
+						"pagePath": "pages/UserInfo/UserInfo"
+					}
+				]
+	},
+	"uniIdRouter": {},
+	"condition" : {//Mode configuration, effective only during development period.
+		"current": 0,//Current active mode (index entry of list)
+		"list": [
+			{
+				"name": "",//mode name
+				"path": "",//startup page, can not be empty
+				"query": ""//The startup parameters are obtained in the onLoad function of the page.
+			}
+		]
+	}
+}
